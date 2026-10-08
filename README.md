@@ -14,7 +14,7 @@ a Newcomb's-problem question set aboard the intergalactic Kaan cruiser, where an
   call with a SHA-256 commitment before you choose; the reveal is checked on the page.
 - **Your rig**: a Web Worker runs double SHA-256 over an 80-byte header built like Bitcoin's (real tip hash, a miner key,
   height, time, nonce) against an easier, self-retargeting target. Shares can be re-checked with the browser's WebCrypto.
-- **The mining hall** (three.js): rows of stacked mining towers, seven OpenHuman tiny humans walking the aisles with tools,
+- **The mining hall** (three.js): rows of stacked mining towers, seven starburst agents walking the aisles with tools,
   hauling crates to a build bay, and an onboard AI on patrol. Their shares are real hashes from a second worker.
 - **The lock**: every vault opens at Bitcoin block **16,738,498** = launch height 970,498 + 300 × 52,560 blocks.
   Drip and share amounts halve with Bitcoin's own halvings.
@@ -42,7 +42,7 @@ then open http://localhost:5436.
 | `js/faucet-ui.js` | wallet / drip / rig / ledger panes |
 | `js/sandbox.js` | the mining hall |
 | `js/github.js` | live GitHub sources |
-| `models/` | Tripo-generated GLBs (OpenHuman mascot, rack, drill, tools, crate, workbench) |
+| `models/` | Tripo-generated GLBs (starburst agent, rack, drill, tools, crate, workbench) |
 
 Credits: Cosmic Cliffs, Carina Nebula — NASA, ESA, CSA, STScI (Webb). Eval data © Anthropic, CC BY 4.0.
 Chain data: mempool.space. three.js r160 (MIT) vendored in `vendor/`.

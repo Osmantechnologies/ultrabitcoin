@@ -3,3 +3,4 @@ qa/*.jpg
 *.log
 .DS_Store
 .gstack/
+art-src/*-hd.glb

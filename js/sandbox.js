@@ -1,6 +1,6 @@
-/* sandbox.js — the mining hall of the Kaan cruiser.
+/* sandbox.js — the mining hall of the Kaan cruiser. Agents: the starburst mascot (owner's reference → ChatGPT → Tripo → 9k tris).
    Rows of mining towers (OpenHuman's Tripo server rack, instanced and stacked up to three high) face two aisles; seven
-   OpenHuman tiny humans walk the hall with tools (Tripo drill + tool set), service their towers, haul crates of new rigs
+   starburst agents walk the hall with tools (Tripo drill + tool set), service their towers, haul crates of new rigs
    to the build bay and stack them; the onboard AI patrols. Every share they announce is a real double SHA-256 result
    from the miner worker, on the live Bitcoin tip. The window is Webb's Cosmic Cliffs. */
 import * as THREE from 'three';
@@ -91,12 +91,13 @@ function fit(obj, size, mode) {
 }
 const MODELS = {};
 async function loadModels() {
-  const names = ['mascot', 'rack', 'drill', 'tools', 'crate', 'workbench'];
+  const names = ['agent', 'rack', 'drill', 'tools', 'crate', 'workbench'];   // agent = the starburst mascot (ChatGPT → Tripo)
   const res = await Promise.allSettled(names.map(n => load(`models/${n}.glb`)));
   res.forEach((r, i) => {
     if (r.status === 'fulfilled') MODELS[names[i]] = prep(r.value);
     else { const g = new THREE.Group(); g.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), metal(0x222833))); MODELS[names[i]] = g; logLine('hall', `models/${names[i]}.glb missing`, 'warn'); }
   });
+  MODELS.mascot = MODELS.agent;
 }
 
 /* ───────── towers ───────── */
@@ -240,14 +241,14 @@ const AGENTS = [
   { name: 'FAUCET-5', note: 'the first faucet', tower: [2, 1] }, { name: 'BITS', note: 'BIP 176', tower: [3, 0] }, { name: 'MERKLE', note: 'the root', tower: [3, 3] }, { name: 'NONCE', note: '32 bits at a time', tower: [1, 0] },
 ];
 const YOU_TOWER = [2, 99];   // the front-most tower of the right aisle's left row
-const SIZE = { human: 1.7, ai: 2.0 };
+const SIZE = { human: 2.05, ai: 2.4 };
 const humans = [];
 const LANE_Z = 1.2;   // the front lane every cross-hall route passes through
 function makeHuman(spec) {
   const root = new THREE.Group(), body = new THREE.Group();
   const model = MODELS.mascot.clone(true); const bb = fit(model, spec.ai ? SIZE.ai : SIZE.human, 'h'); body.add(model); root.add(body);
   root.position.set(spec.x, 0, spec.z); scene.add(root);
-  const hand = new THREE.Group(); hand.position.set(0.55, bb.max.y * 0.45, 0.22); body.add(hand);
+  const hand = new THREE.Group(); hand.position.set(bb.max.x * 0.78, bb.max.y * 0.34, 0.2); body.add(hand);   // beside the starburst agent's right arm
   const head = new THREE.Group(); head.position.set(0, bb.max.y + 0.05, 0); body.add(head);
   const tag = document.createElement('div'); tag.className = 'tag3'; overlay.appendChild(tag);
   const nameEl = document.createElement('div'); nameEl.className = 'name3' + (spec.ai ? ' ai' : '') + (spec.you ? ' you' : ''); nameEl.textContent = spec.label; overlay.appendChild(nameEl);
