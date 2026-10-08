@@ -5,6 +5,7 @@
    from the miner worker, on the live Bitcoin tip. The window is Webb's Cosmic Cliffs. */
 import * as THREE from 'three';
 import { GLTFLoader } from '../vendor/GLTFLoader.js';
+import { Backboard } from './backboard.js';
 import { chain, bus, wallet, vault, rig, RELEASE_HEIGHT, DRIP, eraFactor, release, fmt, ubtc, short, blockUrl } from './core.js';
 
 const $ = (s, r) => (r || document).querySelector(s);
@@ -24,7 +25,7 @@ scene.fog = new THREE.Fog(0xf3ece5, 40, 80);
 const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 160);
 
 /* ───────── the hall ───────── */
-const ROOM = { x0: -14, x1: 14, z0: -11.5, z1: 4, wallH: 10 };
+const ROOM = { x0: -14, x1: 14, z0: -11.5, z1: 4, wallH: 11.6 };
 const W = ROOM.x1 - ROOM.x0, D = ROOM.z1 - ROOM.z0, ZM = (ROOM.z0 + ROOM.z1) / 2;
 const metal = (c, r = 0.55, m = 0.35) => new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m });
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D), metal(0xe8e0d7, 0.78, 0.02));
@@ -37,34 +38,34 @@ for (let z = ROOM.z0 + 2; z < ROOM.z1; z += 2) flat(W, 0.025, 0, z, seam, 0.002)
 for (const x of [-5.6, -1.4, 1.4, 5.6]) flat(0.06, 7.6, x, -6.2, safety);
 flat(W - 4, 0.06, 0, -1.9, safety); flat(W - 4, 0.06, 0, 2.9, safety);
 
-// back wall: one long window onto the Carina Nebula, the towers stand against it
-const WIN = { x0: -12.5, x1: 12.5, y0: 1.2, y1: 9.2 };
+// back wall: one long video wall of live Bitcoin mining (js/backboard.js), the towers stand against it
+const WIN = { x0: -12.5, x1: 12.5, y0: 1.4, y1: 1.4 + 25 * 737 / 2048 };   // 25 m × 9 m, same aspect as the canvas
 const wallMat = metal(0xf6f1ec, 0.85, 0.0);
 function wallPiece(w, h, x, y) { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), wallMat); m.position.set(x, y, ROOM.z0); scene.add(m); }
 wallPiece(WIN.x0 - ROOM.x0, ROOM.wallH, (ROOM.x0 + WIN.x0) / 2, ROOM.wallH / 2);
 wallPiece(ROOM.x1 - WIN.x1, ROOM.wallH, (WIN.x1 + ROOM.x1) / 2, ROOM.wallH / 2);
 wallPiece(WIN.x1 - WIN.x0, WIN.y0, 0, WIN.y0 / 2);
 wallPiece(WIN.x1 - WIN.x0, ROOM.wallH - WIN.y1, 0, (WIN.y1 + ROOM.wallH) / 2);
-const texL = new THREE.TextureLoader();
-const space = texL.load('img/carina.jpg'); space.colorSpace = THREE.SRGBColorSpace;
+const board = new Backboard(MOBILE);
+const boardTex = new THREE.CanvasTexture(board.cv); boardTex.colorSpace = THREE.SRGBColorSpace; boardTex.anisotropy = 8;
 const winW = WIN.x1 - WIN.x0, winH = WIN.y1 - WIN.y0;
-const view = new THREE.Mesh(new THREE.PlaneGeometry(winW * 1.35, winW * 1.35 * 1111 / 1920), new THREE.MeshBasicMaterial({ map: space, color: 0xd6dcea, fog: false }));
-view.position.set(0, (WIN.y0 + WIN.y1) / 2 - 1.2, ROOM.z0 - 4); scene.add(view);
+const boardMesh = new THREE.Mesh(new THREE.PlaneGeometry(winW, winH), new THREE.MeshBasicMaterial({ map: boardTex, toneMapped: false, fog: false }));
+boardMesh.position.set(0, (WIN.y0 + WIN.y1) / 2, ROOM.z0 + 0.03); scene.add(boardMesh);
 const frameMat = metal(0xffffff, 0.5, 0.05);
-for (let i = 0; i <= 8; i++) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.14, winH, 0.18), frameMat); m.position.set(WIN.x0 + i * winW / 8, (WIN.y0 + WIN.y1) / 2, ROOM.z0); scene.add(m); }
-for (const y of [WIN.y0, WIN.y1]) { const m = new THREE.Mesh(new THREE.BoxGeometry(winW + 0.14, 0.16, 0.2), frameMat); m.position.set(0, y, ROOM.z0); scene.add(m); }
+for (const y of [WIN.y0, WIN.y1]) { const m = new THREE.Mesh(new THREE.BoxGeometry(winW + 0.3, 0.16, 0.2), frameMat); m.position.set(0, y, ROOM.z0 + 0.04); scene.add(m); }
+for (const x of [WIN.x0, WIN.x1]) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.16, winH + 0.3, 0.2), frameMat); m.position.set(x, (WIN.y0 + WIN.y1) / 2, ROOM.z0 + 0.04); scene.add(m); }
 const sideL = new THREE.Mesh(new THREE.PlaneGeometry(D, ROOM.wallH), wallMat); sideL.rotation.y = Math.PI / 2; sideL.position.set(ROOM.x0, ROOM.wallH / 2, ZM); scene.add(sideL);
 const sideR = sideL.clone(); sideR.rotation.y = -Math.PI / 2; sideR.position.x = ROOM.x1; scene.add(sideR);
 // overhead cable trays running down each aisle
 const trayMat = metal(0xd9d1c8, 0.6, 0.1);
-for (const x of [-3.5, 3.5]) { const t = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.08, 9), trayMat); t.position.set(x, 8.6, -6.3); scene.add(t); }
+for (const x of [-3.5, 3.5]) { const t = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.08, 9), trayMat); t.position.set(x, 11.0, -6.3); scene.add(t); }
 
 /* ───────── light ───────── */
 scene.add(new THREE.HemisphereLight(0xffffff, 0xd9cfc4, 1.9));
 const sun = new THREE.DirectionalLight(0xfff1e2, 2.3); sun.position.set(4, 16, 12); sun.castShadow = true;
 Object.assign(sun.shadow.camera, { left: -16, right: 16, top: 16, bottom: -16, near: 1, far: 50 });
 sun.shadow.mapSize.set(MOBILE ? 1024 : 2048, MOBILE ? 1024 : 2048); sun.shadow.bias = -0.0005; scene.add(sun); scene.add(sun.target);
-const nebula = new THREE.PointLight(0xffb48a, 8, 22); nebula.position.set(0, 5, -10); scene.add(nebula);
+const nebula = new THREE.PointLight(0xff9a6a, 7, 20); nebula.position.set(0, 6, -9.5); scene.add(nebula);   // spill from the video wall
 for (const x of [-3.5, 3.5]) {   // cool aisle light + a warm work light at each aisle mouth
   const a = new THREE.PointLight(0xfff4ea, 6, 13); a.position.set(x, 6.5, -6.5); scene.add(a);
   const b = new THREE.PointLight(0xffc27a, 5, 9); b.position.set(x, 4, -2.2); scene.add(b);
@@ -374,10 +375,13 @@ function updateCoins(dt) {
 }
 
 /* ───────── camera ───────── */
-const cam = { az: 0, el: MOBILE ? 0.62 : 0.5, target: new THREE.Vector3(0, 1.8, -4.0) };
+const cam = { az: 0, el: MOBILE ? 0.55 : 0.42, target: new THREE.Vector3(0, 2.6, -4.0) };
+// tap the video wall to fly up and read it; tap again (or drag) to fly back
+const view = { focus: 0, goal: 0 };
+const BOARD_TARGET = new THREE.Vector3(0, 0, 0), FOCUS_POS = new THREE.Vector3(), HOME_TARGET = new THREE.Vector3(0, 2.6, -4.0), camT = new THREE.Vector3();
 let drag = null, userZoom = 1;
 const corners = [];
-for (const x of MOBILE ? [-8.6, 8.6] : [-12.6, 12.6]) { corners.push(new THREE.Vector3(x, 8.2, ROOM.z0 + 1.5)); corners.push(new THREE.Vector3(x, 0, 2.4)); corners.push(new THREE.Vector3(x, 1.5, 2.4)); }
+for (const x of MOBILE ? [-8.6, 8.6] : [-12.6, 12.6]) { corners.push(new THREE.Vector3(x, 10.5, ROOM.z0)); corners.push(new THREE.Vector3(x, 0, 2.4)); corners.push(new THREE.Vector3(x, 1.5, 2.4)); }
 const probe = new THREE.Vector3();
 function placeCam(t, d) { camera.position.set(t.x + d * Math.sin(cam.az) * Math.cos(cam.el), t.y + d * Math.sin(cam.el), t.z + d * Math.cos(cam.az) * Math.cos(cam.el)); camera.lookAt(t); }
 function fitDistance(t) { let lo = 4, hi = 90; for (let i = 0; i < 14; i++) { const mid = (lo + hi) / 2; placeCam(t, mid); const ok = corners.every(c => { probe.copy(c).project(camera); return Math.abs(probe.x) < 0.98 && Math.abs(probe.y) < 0.94; }); if (ok) hi = mid; else lo = mid; } return hi; }
@@ -385,7 +389,22 @@ function frame() { const w = stage.clientWidth, h = stage.clientHeight; if (!w |
 new ResizeObserver(frame).observe(stage); frame();
 stage.addEventListener('pointerdown', e => { if (e.target.closest('.hud')) return; drag = { x: e.clientX, y: e.clientY, az: cam.az, el: cam.el, moved: 0 }; });
 addEventListener('pointermove', e => { if (!drag) return; drag.moved = Math.max(drag.moved, Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y)); if (drag.moved < 5) return; cam.az = THREE.MathUtils.clamp(drag.az - (e.clientX - drag.x) * 0.006, -1.0, 1.0); cam.el = THREE.MathUtils.clamp(drag.el + (e.clientY - drag.y) * 0.004, 0.15, 1.25); });
-addEventListener('pointerup', () => (drag = null)); addEventListener('pointercancel', () => (drag = null));
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+addEventListener('pointerup', e => {
+  const click = drag && drag.moved < 5; drag = null; if (!click) return;
+  const r = stage.getBoundingClientRect(); ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, camera); const hit = ray.intersectObject(boardMesh)[0];
+  if (view.goal) view.goal = 0;
+  else if (hit) {
+    // the towers hide the wall's lower half, so fly to where it can be read: over the towers for the top band,
+    // or into the aisle / side corridor in front of the panel that was tapped
+    const p = hit.point; view.goal = 1;
+    if (p.y > 7.8) { const cx = THREE.MathUtils.clamp(p.x, -7.5, 7.5); BOARD_TARGET.set(cx, 9.0, ROOM.z0); FOCUS_POS.set(cx, 9.05, ROOM.z0 + (MOBILE ? 8.5 : 7.2)); }
+    else { const cx = p.x < -6.6 ? -10.4 : p.x < 0 ? -4.1 : p.x < 6.6 ? 4.1 : 10.6; BOARD_TARGET.set(cx, 4.45, ROOM.z0); FOCUS_POS.set(cx, 4.6, ROOM.z0 + (MOBILE ? 12 : 10.4)); }
+    logLine('hall', 'reading the wall · tap again to step back');
+  }
+});
+addEventListener('pointercancel', () => (drag = null));
 stage.addEventListener('wheel', e => { if (!e.ctrlKey && !e.shiftKey) return; e.preventDefault(); userZoom = THREE.MathUtils.clamp(userZoom * (1 + e.deltaY * 0.001), 0.4, 1.3); }, { passive: false });
 $('#zoomIn').addEventListener('click', () => (userZoom = Math.max(0.4, userZoom * 0.85)));
 $('#zoomOut').addEventListener('click', () => (userZoom = Math.min(1.3, userZoom * 1.18)));
@@ -415,13 +434,14 @@ const agentWorker = new Worker(new URL('./miner.worker.js', import.meta.url));
 const AGENT_DUTY = MOBILE ? 0.08 : 0.14;
 agentWorker.onmessage = e => {
   const m = e.data;
-  if (m.type === 'stat') { for (const s of m.jobs) { const h = byName[s.id]; if (!h) continue; h.stat = s; h.bestZ = Math.max(h.bestZ || 0, s.bestZ || 0); if (s.best) { h.hashes.push(s.best); if (h.hashes.length > 12) h.hashes.shift(); } } return; }
+  if (m.type === 'stat') { board.ingest(m.samples, id => (byName[id] ? byName[id].label : id)); for (const s of m.jobs) { const h = byName[s.id]; if (!h) continue; h.stat = s; h.bestZ = Math.max(h.bestZ || 0, s.bestZ || 0); if (s.best) { h.hashes.push(s.best); if (h.hashes.length > 12) h.hashes.shift(); } } return; }
   if (m.type === 'share') {
     const h = byName[m.id]; if (!h) return; shareCount++; h.shares++; h.lastShare = { zeros: m.zeros, t: Date.now(), hash: m.hash }; h.bestZ = Math.max(h.bestZ || 0, m.zeros); h.flash = performance.now();
     h.hashes.push(m.hash); if (!h.carrying) react(h, m.zeros >= m.bits + 3 ? 'cheer' : 'point'); showTag(h, `share for ${h.wallet ? short(h.wallet) : h.label} · ${m.zeros} bits`, 'up');
     const t = h.tower; flyCoin(new THREE.Vector3(t.x + t.face * 0.6, RACK_H * 1.6, t.z), false);
     deckShares.unshift({ name: h.label, hash: m.hash, zeros: m.zeros, t: Date.now() }); deckShares.length = Math.min(deckShares.length, 20);
     logLine(h.label, `share ${hz(m.hash)} · ${m.zeros} bits for ${h.wallet ? `<a href="https://mempool.space/address/${h.wallet}" target="_blank" rel="noopener">${short(h.wallet)}</a>` : 'the hall'} on tip <a href="${blockUrl(m.height)}" target="_blank" rel="noopener">#${fmt(m.height)}</a>`, 'gain');
+    board.share(h.label, m);
     h.mined = (h.mined || 0) + Math.round(10 * Math.pow(2, m.bits - 20) * eraFactor(m.height) * 100) / 100;   // uBTC credited to this agent's wallet, same rate as your rig
     bus.send('agent-share', { name: h.label, wallet: h.wallet, hash: m.hash, zeros: m.zeros, bits: m.bits, height: m.height });
     window.dispatchEvent(new CustomEvent('deck:share', { detail: { name: h.label, wallet: h.wallet, hash: m.hash, zeros: m.zeros, height: m.height } }));
@@ -487,11 +507,12 @@ function onClaim(c) {
   if (chain.tip) agentWorker.postMessage({ type: 'tip', tip: chain.tip });
   agentWorker.postMessage({ type: 'run', on: true });
   syncYou(); drawWall(); humans.forEach(drawTower);
+  board.setAgents(AGENTS.map(a => byName[a.name])); if (chain.tip) board.setTip(chain.tip);
   window.dispatchEvent(new CustomEvent('deck:ready'));
 })();
 
 chain.on('tip', ({ tip, first }) => {
-  agentWorker.postMessage({ type: 'tip', tip });
+  agentWorker.postMessage({ type: 'tip', tip }); board.setTip(tip);
   drawWall(); humans.forEach(drawTower);
   $('#hudTip') && ($('#hudTip').innerHTML = `<a href="${blockUrl(tip.height)}" target="_blank" rel="noopener">#${fmt(tip.height)}</a> · drip open`);
   if (!first) {
@@ -507,13 +528,22 @@ setInterval(() => { humans.forEach(drawTower); drawWall(); syncYou(); }, 3000);
 setInterval(blinkLeds, 220);
 document.addEventListener('visibilitychange', () => agentWorker.postMessage({ type: 'duty', duty: document.hidden ? 0.03 : AGENT_DUTY }));
 
-let last = performance.now(), fpsT = 0, fpsN = 0;
+let last = performance.now(), fpsT = 0, fpsN = 0, lastBoard = 0;
+// the network's own hashrate for the wall (mempool.space, every 10 min)
+const netRate = () => fetch('https://mempool.space/api/v1/mining/hashrate/3d').then(r => r.json()).then(d => board.setNet(d.currentHashrate)).catch(() => { });
+netRate(); setInterval(netRate, 600000);
 renderer.setAnimationLoop(now => {
   const dt = Math.min(0.05, (now - last) / 1000); last = now; const t = now / 1000;
   if (!stage.clientWidth) return;
   for (const h of humans) updateHuman(h, dt, t);
   updateCoins(dt); updateSparks(dt); updateBay(dt);
-  placeCam(cam.target, fitDistance(cam.target) * userZoom);
+  if (now - lastBoard > (MOBILE ? 80 : 50)) { lastBoard = now; board.draw(now); boardTex.needsUpdate = true; }
+  view.focus += (view.goal - view.focus) * Math.min(1, dt * 2.5);
+  if (view.focus > 0.001) {   // blend from the room view to a level close-up of the wall
+    const f = view.focus * view.focus * (3 - 2 * view.focus);
+    const dHome = fitDistance(HOME_TARGET) * userZoom; placeCam(HOME_TARGET, dHome); const pHome = camera.position.clone();
+    camera.position.lerpVectors(pHome, FOCUS_POS, f); camT.lerpVectors(HOME_TARGET, BOARD_TARGET, f); camera.lookAt(camT);
+  } else placeCam(cam.target, fitDistance(cam.target) * userZoom);
   sun.position.set(camera.position.x * 0.4 + 3, 16, camera.position.z * 0.4 + 8);
   sideL.visible = camera.position.x > ROOM.x0 + 1; sideR.visible = camera.position.x < ROOM.x1 - 1;
   renderer.render(scene, camera); placeLabels();

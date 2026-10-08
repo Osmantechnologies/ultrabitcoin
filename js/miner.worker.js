@@ -94,6 +94,7 @@ function retarget(j) {
 }
 
 let rr = 0, lastStat = 0, lastRetarget = 0;
+let samples = [], sampleSkip = 4096;   // ~1 in 4096 hashes of every job, for the hall's backboard (an unbiased sample of the work)
 function slice() {
   if (!running || !chainTip || !jobs.length) { setTimeout(slice, 200); return; }
   const work = 40 * duty / (1 - Math.min(0.95, duty));     // ms of hashing per 40 ms of rest at this duty
@@ -105,6 +106,11 @@ function slice() {
       if (n === 0) { j.extranonce = (j.extranonce + 1) >>> 0; setTail(j); }
       const z = tryNonce(j, n); j.hashes++; j.window++;
       if (z > j.bestZ) { j.bestZ = z; j.best = finalHashHex(); }
+      if (--sampleSkip <= 0 && samples.length < 400) {
+        sampleSkip = 2048 + ((Math.random() * 4096) | 0);   // a random gap, ~1 in 4096 on average, blind to the hash
+        const hd = new Uint8Array(80); hd.set(j.first, 0); hd.set(j.tail.subarray(0, 12), 64); hd.set(le32(n), 76);
+        samples.push({ id: j.id, nonce: n, zeros: z, hash: finalHashHex(), header: hex(hd) });
+      }
       if (z >= j.bits) {
         const header = new Uint8Array(80); header.set(j.first, 0); header.set(j.tail.subarray(0, 12), 64); header.set(le32(n), 76);
         postMessage({ type: 'share', id: j.id, key: j.key, bits: j.bits, zeros: z, hash: finalHashHex(), header: hex(header), height: j.height, prev: j.prevHex, nonce: n, extranonce: j.extranonce, time: j.time });
@@ -119,7 +125,8 @@ function slice() {
     for (const j of jobs) { const r = j.window / dt; j.rateEma = j.rateEma ? j.rateEma * 0.7 + r * 0.3 : r; j.window = 0; }
     for (const j of jobs) if (!j.tuned && j.rateEma) { retarget(j); j.tuned = true; }
     if (now - lastRetarget > 15000) { jobs.forEach(retarget); lastRetarget = now; }
-    postMessage({ type: 'stat', jobs: jobs.map(j => ({ id: j.id, rate: j.rateEma, hashes: j.hashes, bits: j.bits, best: j.best, bestZ: j.bestZ, nonce: j.nonce })) });
+    postMessage({ type: 'stat', samples, jobs: jobs.map(j => ({ id: j.id, rate: j.rateEma, hashes: j.hashes, bits: j.bits, best: j.best, bestZ: j.bestZ, nonce: j.nonce })) });
+    samples = [];
     for (const j of jobs) { j.bestZ = 0; }
   }
   setTimeout(slice, 40);

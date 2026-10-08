@@ -84,7 +84,7 @@ export const chain = Object.assign(emitter(), {
     } catch { }
   },
 });
-function slim(b) { return { height: b.height, hash: b.id, time: b.timestamp, txs: b.tx_count, pool: (b.extras && b.extras.pool && b.extras.pool.name) || '', reward: b.extras ? b.extras.reward : null }; }
+function slim(b) { return { height: b.height, hash: b.id, time: b.timestamp, txs: b.tx_count, pool: (b.extras && b.extras.pool && b.extras.pool.name) || '', reward: b.extras ? b.extras.reward : null, difficulty: b.difficulty, bits: b.bits, nonce: b.nonce }; }
 export const blockUrl = h => `https://mempool.space/block/${h}`;
 
 /* ───────── wallet ───────── */
