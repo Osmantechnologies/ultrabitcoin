@@ -5,6 +5,7 @@ import { mountFaucet } from './faucet-ui.js';
 import { mountChip } from './connect.js';
 import './sandbox.js';
 import { initSources } from './github.js';
+import './coin.js';
 
 const $ = s => document.querySelector(s);
 const ago = t => { const s = Math.max(0, Date.now() / 1000 - t); return s < 60 ? Math.round(s) + 's' : s < 3600 ? Math.round(s / 60) + 'm' : (s / 3600).toFixed(1) + 'h'; };

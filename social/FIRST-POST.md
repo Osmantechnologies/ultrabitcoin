@@ -4,6 +4,7 @@ first transaction confirmed under 24 h before the pick. The site now mines for e
 Tx c63abc… pays 1.0 BTC to bc1qsvg7… (block 970,436); tx 1c607c… pays 0.28592368 BTC to bc1qys7t… (block 970,404).
 Attach in order: qa/post-1-top.png → qa/post-2-hall.png → qa/post-3-wallets.png → qa/post-4-source.png
 Long version needs X Premium (over 280 characters).
+Coin: $uBTC "Ultra Bitcoin", pump.fun, CA 3ibpM2bK8xMvAY2vYpQV6W3xWuxiPUoqPPJt4ieopump (verified on DexScreener + Solana RPC 2026-10-09, ~$13.5K mcap). CA is the closing line by owner request.
 Creator fees (owner's choice, 2026-10-09): BTC into a CLTV-timelocked vault (`<16738498> OP_CHECKLOCKTIMEVERIFY OP_DROP <pubkey> OP_CHECKSIG`, P2WSH).
 The vault address is NOT built yet: it needs the owner's public key. Build + verify it before the coin launches, then add the address to the site.
 
@@ -30,7 +31,9 @@ Connect a Bitcoin wallet and your browser mines beside them. Bitcoin, but ultra.
 
 **Our goal.** A Bitcoin faucet that keeps a 300-year promise in the open. uBTC drips today, every vault opens at block 16,738,498, and real bitcoin waits for the same block.
 
-**Creator fees.** They buy BTC, locked by Bitcoin's own timelock until block 16,738,498. No one can move it before then, us included.
+**Creator fees.** Fees go into locking BTC for 300 years, until block 16,738,498. Mine uBTC.
+
+CA: 3ibpM2bK8xMvAY2vYpQV6W3xWuxiPUoqPPJt4ieopump
 
 ## Short version (≤280, one post)
 
