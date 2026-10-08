@@ -76,7 +76,7 @@ const btc = v => v == null ? '—' : (v >= 1 ? v.toFixed(2) : v >= 0.01 ? v.toFi
 let fresh = null; const bal = {};
 fetch('data/fresh-wallets.json', { cache: 'no-store' }).then(r => r.json()).then(f => {
   fresh = f;
-  $('#wnote').innerHTML = `picked ${f.fetched_at.slice(0, 16).replace('T', ' ')} UTC at bitcoin block #${fmt(f.tip)} from mempool.space: first transaction confirmed under 24 hours earlier, at least 0.02 BTC received, still holding. strangers' wallets: the agents put each address into every header they hash, exactly like your rig, and nothing is ever sent to them. "holding" is read live.`;
+  $('#wnote').innerHTML = `picked ${f.fetched_at.slice(0, 16).replace('T', ' ')} UTC at bitcoin block #${fmt(f.tip)} from mempool.space: first transaction confirmed under 24 hours earlier, at least 0.02 BTC received; the four with the highest balances. strangers' wallets: the agents put each address into every header they hash, exactly like your rig, and nothing is ever sent to them. "holding" is read live.`;
   refreshBalances(); setInterval(refreshBalances, 120000);
 }).catch(() => { });
 async function refreshBalances() {
@@ -92,17 +92,24 @@ async function refreshBalances() {
 function agents() {
   const D = deck(); if (!D) return;
   const hs = D.humans.filter(h => !h.ai && !h.hidden);
-  const rows = hs.slice().sort((a, b) => (b.you ? 1 : 0) - (a.you ? 1 : 0) || (b.mined || 0) - (a.mined || 0));
-  const fw = a => fresh && fresh.wallets.find(w => w.address === a);
-  $('#agents').innerHTML = `<div class="ag ag--hd"><span>agent</span><span>mining for</span><span class="num">funded</span><span class="num">holding</span><span class="num">uBTC</span><span class="num">shares</span><span>last share</span></div>` +
-    rows.map(h => {
-      const a = h.you ? (wallet.current && wallet.current.address) : h.wallet; const w = fw(a);
-      const mined = h.you ? (a ? vault.of(a).total : 0) : (h.mined || 0);
+  // one row per wallet, with the crew of agents mining for it; your own row on top
+  const rows = [];
+  const you = hs.find(h => h.you);
+  if (you) rows.push({ you: true, a: wallet.current && wallet.current.address, crew: [you] });
+  if (fresh) for (const w of fresh.wallets) rows.push({ a: w.address, w, crew: hs.filter(h => !h.you && h.wallet === w.address) });
+  const sum = (crew, f) => crew.reduce((t, h) => t + (f(h) || 0), 0);
+  const lastOf = crew => crew.map(h => h.lastShare).filter(Boolean).sort((x, y) => y.t - x.t)[0];
+  $('#agents').innerHTML = `<div class="ag ag--hd"><span>crew</span><span>mining for</span><span class="num">funded</span><span class="num">holding</span><span class="num">uBTC</span><span class="num">shares</span><span>last share</span></div>` +
+    rows.map(r => {
+      const a = r.a, w = r.w, ls = lastOf(r.crew);
+      const mined = r.you ? (a ? vault.of(a).total : 0) : sum(r.crew, h => h.mined);
+      const crewTxt = r.you ? `YOU<i>${rig.running ? 'rig on' : 'idle'}</i>` : r.crew.map(h => h.label).join(' + ') + `<i>${rate(sum(r.crew, h => h.stat && h.stat.rate))}</i>`;
       const link = a ? `<a href="https://mempool.space/address/${a}" target="_blank" rel="noopener">${a}</a>` : '—';
-      return `<div class="ag ${h.you ? 'you' : ''}"><span class="who">${h.you ? 'YOU' : h.label}<i>${h.you ? (rig.running ? 'rig on' : 'idle') : rate(h.stat && h.stat.rate)}</i></span><span class="addr">${link}</span><span class="num">${w ? `<a class="tx" href="https://mempool.space/tx/${w.first_txid}" target="_blank" rel="noopener" title="first funding transaction">${w.first_funded.slice(11, 16)} UTC ↗</a>` : '—'}</span><span class="num">${a && bal[a] != null ? btc(bal[a]) : w ? btc(w.balance_btc) : '—'}</span><span class="num mined">${ubtc(mined)}</span><span class="num">${h.shares || 0}</span><span class="h">${h.lastShare && h.lastShare.hash ? hz(h.lastShare.hash, 24) : '—'}</span><span class="addrline">${a || ''}</span></div>`;
+      return `<div class="ag ${r.you ? 'you' : ''}"><span class="who">${crewTxt}</span><span class="addr">${link}</span><span class="num">${w ? `<a class="tx" href="https://mempool.space/tx/${w.first_txid}" target="_blank" rel="noopener" title="first funding transaction">${w.first_funded.slice(11, 16)} UTC ↗</a>` : '—'}</span><span class="num">${a && bal[a] != null ? btc(bal[a]) : w ? btc(w.balance_btc) : '—'}</span><span class="num mined">${ubtc(mined)}</span><span class="num">${sum(r.crew, h => h.shares)}</span><span class="h">${ls && ls.hash ? hz(ls.hash, 24) : '—'}</span><span class="addrline">${a || ''}</span></div>`;
     }).join('');
-  const miners = hs.filter(h => !h.you); const sum = miners.reduce((s, h) => s + ((h.stat && h.stat.rate) || 0), 0);
-  $('#kRate').textContent = rate(sum); $('#agMeta').textContent = fresh ? `${fresh.wallets.length} wallets · ${btc(fresh.wallets.reduce((s, w) => s + (bal[w.address] != null ? bal[w.address] : w.balance_btc), 0))} BTC held` : '—';
+  const miners = hs.filter(h => !h.you);
+  $('#kRate').textContent = rate(sum(miners, h => h.stat && h.stat.rate));
+  $('#agMeta').textContent = fresh ? `${fresh.wallets.length} wallets · ${btc(fresh.wallets.reduce((t, w) => t + (bal[w.address] != null ? bal[w.address] : w.balance_btc), 0))} BTC held` : '—';
   $('#kShares').textContent = fmt(D.shareCount);
   const best = Math.max(0, ...D.humans.map(h => h.bestZ || 0)); $('#kBest').innerHTML = best ? `${best}<small>zero bits</small>` : '—';
   $('#kRig').textContent = rig.running ? rate(rig.stat && rig.stat.rate) : 'idle';

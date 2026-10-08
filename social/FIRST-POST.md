@@ -1,6 +1,6 @@
 # First post — Ultrabitcoin (v2, 2026-10-09: owner asked for 4 wallets + 2 tx links)
 Numbers checked 2026-10-09 ~00:20 UTC on mempool.space. Wallets picked 2026-10-08 15:34 UTC (`data/fresh-wallets.json`):
-first transaction confirmed under 24 h before the pick. The four below are the largest; all four still hold every satoshi.
+first transaction confirmed under 24 h before the pick. The site now mines for exactly these four (highest balances); all four still hold every satoshi.
 Tx c63abc… pays 1.0 BTC to bc1qsvg7… (block 970,436); tx 1c607c… pays 0.28592368 BTC to bc1qys7t… (block 970,404).
 Attach in order: qa/post-1-top.png → qa/post-2-hall.png → qa/post-3-wallets.png → qa/post-4-source.png
 Long version needs X Premium (over 280 characters).
@@ -15,7 +15,7 @@ Anthropic's eval data holds a currency from the future. In one-box-tendency.json
 
 We built its faucet. Every real Bitcoin block opens two containers. The sealed one holds 1,000 uBTC only if the onboard AI predicted you would leave the other. Every vault opens at block 16,738,498, three hundred years of blocks from today.
 
-Seven agents mine uBTC on the live Bitcoin tip, real SHA-256, each for a Bitcoin wallet that was less than a day old when we picked it. Four of them received 1.39 BTC and have not moved a satoshi:
+Seven agents mine uBTC on the live Bitcoin tip, real SHA-256, in crews for four Bitcoin wallets that were less than a day old when we picked them. They received 1.39 BTC and have not moved a satoshi:
 
 bc1qsvg7z6re84xzcqequdp9jf23e0p90edmnrt5ln
 bc1qys7t9afhypzs6vac2pyfp6mydr4uutqszjz63t

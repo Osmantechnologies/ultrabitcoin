@@ -488,7 +488,8 @@ function onClaim(c) {
   logLine('hall', 'powering the mining hall…');
   // each agent mines for a bitcoin wallet first funded in the last 24 h (data/fresh-wallets.json, tools/fresh_wallets.py)
   const [, fw] = await Promise.all([loadModels(), fetch('data/fresh-wallets.json', { cache: 'no-store' }).then(r => r.json()).catch(() => null)]);
-  if (fw) AGENTS.forEach((a, i) => { const w = fw.wallets[i]; if (w) { a.wallet = w.address; a.fresh = w; } });
+  // crews: seven agents across the wallets, biggest balances first (four wallets → crews of 2, 2, 2, 1)
+  if (fw && fw.wallets.length) AGENTS.forEach((a, i) => { const w = fw.wallets[i % fw.wallets.length]; a.wallet = w.address; a.fresh = w; });
   window.__FRESH = fw;
   buildTowers(); buildFront();
   const tAt = ([row, slot]) => { const list = towers.filter(t => t.row === row); return list[Math.min(slot, list.length - 1)]; };

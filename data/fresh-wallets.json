@@ -1,7 +1,7 @@
 {
  "fetched_at": "2026-10-08T15:34:42Z",
  "tip": 970508,
- "rule": "first transaction confirmed < 24h before fetched_at; >= 0.02 BTC received; <= 8 txs",
+ "rule": "first transaction confirmed < 24h before fetched_at; >= 0.02 BTC received; <= 8 txs; the four with the highest balances are mined for",
  "source": "mempool.space",
  "wallets": [
   {
@@ -35,7 +35,9 @@
    "funded_btc": 0.0434395,
    "balance_btc": 0.0434395,
    "tx_count": 1
-  },
+  }
+ ],
+ "reserve": [
   {
    "address": "bc1qlyfm68flzl6jfnht78ecnmj0p0wxdadgqh63yc",
    "first_funded": "2026-10-07T20:32:37Z",
@@ -45,23 +47,13 @@
    "tx_count": 1
   },
   {
-   "address": "bc1q4l382zyx5ex2sl80k2nsgx0e80f9nv0mzrxw50",
-   "first_funded": "2026-10-07T19:06:50Z",
-   "first_txid": "034811bc5822e10d1234d6fc8013fb4ec11d86d0f1a901b70cc1257a463508b8",
-   "funded_btc": 0.03413852,
-   "balance_btc": 0.00017336,
-   "tx_count": 5
-  },
-  {
    "address": "bc1qr8faqvrfdup65965wnjl5s0lg3d8xavqavwuus",
    "first_funded": "2026-10-08T01:45:08Z",
    "first_txid": "dccf67b71d690e37eceb1797a87fdb35a92b5949e0431bf85a21fdf6ba51814d",
    "funded_btc": 0.02376723,
    "balance_btc": 0.02376723,
    "tx_count": 1
-  }
- ],
- "reserve": [
+  },
   {
    "address": "168KXscBe764dQrcfrLPHPXQNoSZxMGAw4",
    "first_funded": "2026-10-08T07:29:57Z",
@@ -69,6 +61,14 @@
    "funded_btc": 0.0236383,
    "balance_btc": 0.0236383,
    "tx_count": 1
+  },
+  {
+   "address": "bc1q4l382zyx5ex2sl80k2nsgx0e80f9nv0mzrxw50",
+   "first_funded": "2026-10-07T19:06:50Z",
+   "first_txid": "034811bc5822e10d1234d6fc8013fb4ec11d86d0f1a901b70cc1257a463508b8",
+   "funded_btc": 0.03413852,
+   "balance_btc": 0.00017336,
+   "tx_count": 5
   },
   {
    "address": "bc1qxg8re2xm7hs60k869wm29w3z3xfy6vwtuxsyyt",
