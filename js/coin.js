@@ -1,7 +1,7 @@
 /* coin.js — $uBTC (Ultra Bitcoin), the pump.fun coin: copy buttons and a live market cap from DexScreener (CORS *).
    Its creator fees go into locking BTC for 300 years (the vault in the goal pane). */
 import { timeout } from './core.js';
-export const CA = '3ibpM2bK8xMvAY2vYpQV6W3xWuxiPUoqPPJt4ieopump';
+export const CA = '3ffBp3yBPSB86YxoxtDwxsBfa3qrDLp3mJSeJzp4pump';
 document.querySelectorAll('[data-copy-ca]').forEach(b => b.addEventListener('click', async e => {
   e.stopPropagation();
   try { await navigator.clipboard.writeText(CA); b.textContent = 'copied'; } catch { b.textContent = 'select it'; }
