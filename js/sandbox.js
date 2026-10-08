@@ -10,28 +10,28 @@ import { chain, bus, wallet, vault, rig, RELEASE_HEIGHT, DRIP, eraFactor, releas
 const $ = (s, r) => (r || document).querySelector(s);
 const MOBILE = matchMedia('(max-width: 900px)').matches;
 const stage = $('#stage'), overlay = $('#overlay');
-const ACC = 0xf7a541;
+const ACC = 0xe76740;   // the mascot's belly coral
 
 /* ───────── renderer ───────── */
 const renderer = new THREE.WebGLRenderer({ antialias: !MOBILE, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 2 : 1.5));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.2;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 stage.appendChild(renderer.domElement);
-const scene = new THREE.Scene(); scene.background = new THREE.Color(0x03040a);
-scene.fog = new THREE.Fog(0x05070e, 34, 64);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0xf3ece5);
+scene.fog = new THREE.Fog(0xf3ece5, 40, 80);
 const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 160);
 
 /* ───────── the hall ───────── */
 const ROOM = { x0: -14, x1: 14, z0: -11.5, z1: 4, wallH: 10 };
 const W = ROOM.x1 - ROOM.x0, D = ROOM.z1 - ROOM.z0, ZM = (ROOM.z0 + ROOM.z1) / 2;
 const metal = (c, r = 0.55, m = 0.35) => new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m });
-const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D), metal(0x1a202c, 0.42, 0.25));
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D), metal(0xe8e0d7, 0.78, 0.02));
 floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, ZM); floor.receiveShadow = true; scene.add(floor);
 const flat = (w, d, x, z, mat, y = 0.004) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), mat); m.rotation.x = -Math.PI / 2; m.position.set(x, y, z); scene.add(m); return m; };
 // deck plating seams and the orange safety lines that mark the two aisles and the front lane
-const seam = new THREE.MeshBasicMaterial({ color: 0x05070c }), safety = new THREE.MeshBasicMaterial({ color: 0xc98a3a });
+const seam = new THREE.MeshBasicMaterial({ color: 0xd6ccc1 }), safety = new THREE.MeshBasicMaterial({ color: 0xe76740 });
 for (let x = ROOM.x0 + 2; x < ROOM.x1; x += 2) flat(0.025, D, x, ZM, seam, 0.002);
 for (let z = ROOM.z0 + 2; z < ROOM.z1; z += 2) flat(W, 0.025, 0, z, seam, 0.002);
 for (const x of [-5.6, -1.4, 1.4, 5.6]) flat(0.06, 7.6, x, -6.2, safety);
@@ -39,7 +39,7 @@ flat(W - 4, 0.06, 0, -1.9, safety); flat(W - 4, 0.06, 0, 2.9, safety);
 
 // back wall: one long window onto the Carina Nebula, the towers stand against it
 const WIN = { x0: -12.5, x1: 12.5, y0: 1.2, y1: 9.2 };
-const wallMat = metal(0x0c1019);
+const wallMat = metal(0xf6f1ec, 0.85, 0.0);
 function wallPiece(w, h, x, y) { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), wallMat); m.position.set(x, y, ROOM.z0); scene.add(m); }
 wallPiece(WIN.x0 - ROOM.x0, ROOM.wallH, (ROOM.x0 + WIN.x0) / 2, ROOM.wallH / 2);
 wallPiece(ROOM.x1 - WIN.x1, ROOM.wallH, (WIN.x1 + ROOM.x1) / 2, ROOM.wallH / 2);
@@ -50,26 +50,26 @@ const space = texL.load('img/carina.jpg'); space.colorSpace = THREE.SRGBColorSpa
 const winW = WIN.x1 - WIN.x0, winH = WIN.y1 - WIN.y0;
 const view = new THREE.Mesh(new THREE.PlaneGeometry(winW * 1.35, winW * 1.35 * 1111 / 1920), new THREE.MeshBasicMaterial({ map: space, color: 0xd6dcea, fog: false }));
 view.position.set(0, (WIN.y0 + WIN.y1) / 2 - 1.2, ROOM.z0 - 4); scene.add(view);
-const frameMat = metal(0x07090f);
+const frameMat = metal(0xffffff, 0.5, 0.05);
 for (let i = 0; i <= 8; i++) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.14, winH, 0.18), frameMat); m.position.set(WIN.x0 + i * winW / 8, (WIN.y0 + WIN.y1) / 2, ROOM.z0); scene.add(m); }
 for (const y of [WIN.y0, WIN.y1]) { const m = new THREE.Mesh(new THREE.BoxGeometry(winW + 0.14, 0.16, 0.2), frameMat); m.position.set(0, y, ROOM.z0); scene.add(m); }
 const sideL = new THREE.Mesh(new THREE.PlaneGeometry(D, ROOM.wallH), wallMat); sideL.rotation.y = Math.PI / 2; sideL.position.set(ROOM.x0, ROOM.wallH / 2, ZM); scene.add(sideL);
 const sideR = sideL.clone(); sideR.rotation.y = -Math.PI / 2; sideR.position.x = ROOM.x1; scene.add(sideR);
 // overhead cable trays running down each aisle
-const trayMat = metal(0x141924, 0.6, 0.5);
+const trayMat = metal(0xd9d1c8, 0.6, 0.1);
 for (const x of [-3.5, 3.5]) { const t = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.08, 9), trayMat); t.position.set(x, 8.6, -6.3); scene.add(t); }
 
 /* ───────── light ───────── */
-scene.add(new THREE.HemisphereLight(0xdfe6ff, 0x1a1712, 1.15));
-const sun = new THREE.DirectionalLight(0xffe6cc, 1.7); sun.position.set(4, 16, 12); sun.castShadow = true;
+scene.add(new THREE.HemisphereLight(0xffffff, 0xd9cfc4, 1.9));
+const sun = new THREE.DirectionalLight(0xfff1e2, 2.3); sun.position.set(4, 16, 12); sun.castShadow = true;
 Object.assign(sun.shadow.camera, { left: -16, right: 16, top: 16, bottom: -16, near: 1, far: 50 });
 sun.shadow.mapSize.set(MOBILE ? 1024 : 2048, MOBILE ? 1024 : 2048); sun.shadow.bias = -0.0005; scene.add(sun); scene.add(sun.target);
-const nebula = new THREE.PointLight(0xf0a86a, 14, 22); nebula.position.set(0, 5, -10); scene.add(nebula);
+const nebula = new THREE.PointLight(0xffb48a, 8, 22); nebula.position.set(0, 5, -10); scene.add(nebula);
 for (const x of [-3.5, 3.5]) {   // cool aisle light + a warm work light at each aisle mouth
-  const a = new THREE.PointLight(0x4a8fd8, 10, 13); a.position.set(x, 6.5, -6.5); scene.add(a);
+  const a = new THREE.PointLight(0xfff4ea, 6, 13); a.position.set(x, 6.5, -6.5); scene.add(a);
   const b = new THREE.PointLight(0xffc27a, 5, 9); b.position.set(x, 4, -2.2); scene.add(b);
 }
-const front = new THREE.PointLight(0xaabbff, 7, 22); front.position.set(0, 6, 3); scene.add(front);
+const front = new THREE.PointLight(0xfff4ea, 4, 22); front.position.set(0, 6, 3); scene.add(front);
 for (const x of [-9, 9]) { const l = new THREE.PointLight(0xffc27a, 6, 10); l.position.set(x, 3.5, 1.2); scene.add(l); }   // work lights over the bench and the crates
 
 /* ───────── models ───────── */
@@ -126,7 +126,8 @@ function buildTowers() {
       towers.push(t); for (let l = 0; l < levels; l++) list.push({ x: row.x, y: l * RACK_H, z, ry: row.face > 0 ? Math.PI / 2 : -Math.PI / 2 });
     }
   });
-  const inst = new THREE.InstancedMesh(geo, mesh.material, list.length); inst.castShadow = inst.receiveShadow = true;
+  const rackMat = mesh.material.clone(); rackMat.color.setRGB(3.1, 3.0, 2.9);   // the Tripo cabinet is near-black: lift it to a light shell for the bright hall
+  const inst = new THREE.InstancedMesh(geo, rackMat, list.length); inst.castShadow = inst.receiveShadow = true;
   const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), up = new THREE.Vector3(0, 1, 0), one = new THREE.Vector3(1, 1, 1);
   list.forEach((p, i) => { q.setFromAxisAngle(up, p.ry); m4.compose(new THREE.Vector3(p.x, p.y, p.z), q, one); inst.setMatrixAt(i, m4); });
   scene.add(inst);
@@ -136,19 +137,19 @@ function buildTowers() {
   let k = 0; const col = new THREE.Color();
   list.forEach(p => {
     const fx = p.x + Math.sign(Math.sin(p.ry)) * (RACK.d / 2 + 0.012);
-    for (let j = 0; j < 3; j++) { m4.makeTranslation(fx, p.y + RACK_H * (0.25 + j * 0.25), p.z); leds.setMatrixAt(k, m4); leds.setColorAt(k, col.set(j === 1 ? ACC : 0x3a86ff)); k++; }
+    for (let j = 0; j < 3; j++) { m4.makeTranslation(fx, p.y + RACK_H * (0.25 + j * 0.25), p.z); leds.setMatrixAt(k, m4); leds.setColorAt(k, col.set(j === 1 ? ACC : 0x3bb28a)); k++; }
   });
   scene.add(leds); LEDS = leds;
 }
 function blinkLeds() {
   if (!LEDS) return; const c = new THREE.Color();
-  for (let i = 0; i < 18; i++) { const k = Math.floor(Math.random() * LEDS.count); const r = Math.random(); LEDS.setColorAt(k, c.set(r < 0.55 ? 0x3a86ff : r < 0.9 ? ACC : 0x0a1220)); }
+  for (let i = 0; i < 18; i++) { const k = Math.floor(Math.random() * LEDS.count); const r = Math.random(); LEDS.setColorAt(k, c.set(r < 0.55 ? 0x3bb28a : r < 0.9 ? ACC : 0xd9d1c8)); }
   LEDS.instanceColor.needsUpdate = true;
 }
 
 /* tower status screens (only on the towers someone looks after) */
-const C = { acc: '#f7a541', ink: '#dfe6ee', ink2: '#9aa7b8', ink3: '#4f5a6c', ok: '#6fe8a8', bg: '#05070e', grid: '#1a2030' };
-const MONO = 'IBM Plex Mono, ui-monospace, monospace';
+const C = { acc: '#e76740', ink: '#2b1f1a', ink2: '#6e5e55', ink3: '#a8988e', ok: '#2f9e6b', bg: '#fffaf6', grid: '#eadfd5' };
+const MONO = 'JetBrains Mono, ui-monospace, monospace';
 function makeScreen(w, h) { const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; return { cv, ctx: cv.getContext('2d'), tex }; }
 function towerScreen(t) {
   const s = makeScreen(320, 200); const p = new THREE.Mesh(new THREE.PlaneGeometry(RACK.w * 0.86, RACK.w * 0.86 * 200 / 320), new THREE.MeshBasicMaterial({ map: s.tex, toneMapped: false }));
@@ -167,7 +168,7 @@ function drawTower(h) {
   const t = h.tower; if (!t || !t.screen) return; const { ctx, cv } = t.screen; const st = h.stat || {};
   ctx.fillStyle = C.bg; ctx.fillRect(0, 0, cv.width, cv.height);
   ctx.fillStyle = h.flash && performance.now() - h.flash < 1500 ? C.acc : C.grid; ctx.fillRect(0, 0, cv.width, 4);
-  ctx.font = `600 22px ${MONO}`; ctx.fillStyle = h.you ? C.acc : C.ink; ctx.fillText(h.you ? (h.hidden ? tName(t) + ' · FREE' : 'YOUR TOWER') : tName(t) + ' · ' + h.label, 14, 34);
+  ctx.font = `600 22px ${MONO}`; ctx.fillStyle = h.you ? C.acc : C.ink; ctx.fillText(h.you ? (h.hidden ? tName(t) + ' · FREE' : 'YOUR TOWER') : h.label + ' → ' + (h.wallet ? short(h.wallet) : tName(t)), 14, 34);
   ctx.font = `500 17px ${MONO}`; ctx.fillStyle = C.ink2; ctx.fillText((h.idle ? 'idle' : rateTxt(st.rate)) + '  ·  ' + (h.shares || 0) + ' shares', 14, 66);
   ctx.fillStyle = C.ink3; ctx.fillText('target ' + (st.bits ? st.bits + ' bits' : '—') + (h.bestZ ? '  best ' + h.bestZ : ''), 14, 92);
   ctx.font = `500 16px ${MONO}`;
@@ -187,7 +188,8 @@ function buildFront() {
   for (const [w, d, x, z] of [[RACK.d + 0.6, 0.05, 0, -(RACK.w + 0.6) / 2], [RACK.d + 0.6, 0.05, 0, (RACK.w + 0.6) / 2], [0.05, RACK.w + 0.6, -(RACK.d + 0.6) / 2, 0], [0.05, RACK.w + 0.6, (RACK.d + 0.6) / 2, 0]]) flat(w, d, BAY.x + x, BAY.z + z, safety, 0.008);
 }
 function bayAdd() {
-  const o = MODELS.rack.clone(true); fit(o, RACK_H, 'h'); const g = new THREE.Group(); g.add(o); g.position.set(BAY.x, BAY.levels * RACK_H + 3, BAY.z); scene.add(g);
+  const o = MODELS.rack.clone(true); fit(o, RACK_H, 'h'); o.traverse(m => { if (m.isMesh) { m.material = m.material.clone(); m.material.color.setRGB(3.1, 3.0, 2.9); } });
+  const g = new THREE.Group(); g.add(o); g.position.set(BAY.x, BAY.levels * RACK_H + 3, BAY.z); scene.add(g);
   BAY.racks.push({ g, y: BAY.levels * RACK_H, t: 0 }); BAY.levels++;
   if (BAY.levels >= 3) setTimeout(() => {
     logLine('hall', 'build bay: the new tower is cabled and hashing · clearing the bay for the next one', 'blk');
@@ -201,8 +203,8 @@ const scrCv = document.createElement('canvas'); scrCv.width = 1024; scrCv.height
 const scrTex = new THREE.CanvasTexture(scrCv); scrTex.colorSpace = THREE.SRGBColorSpace; scrTex.anisotropy = 4;
 const scrG = new THREE.Group(); scrG.position.set(SCR.x, SCR.y, SCR.z); scrG.rotation.y = SCR.ry; scene.add(scrG);
 scrG.add(new THREE.Mesh(new THREE.PlaneGeometry(SCR.w, SCR.h), new THREE.MeshBasicMaterial({ map: scrTex, toneMapped: false })));
-const scrBack = new THREE.Mesh(new THREE.BoxGeometry(SCR.w + 0.2, SCR.h + 0.2, 0.08), metal(0x05060a)); scrBack.position.z = -0.06; scrG.add(scrBack);
-for (const dx of [-SCR.w / 3, SCR.w / 3]) { const len = ROOM.wallH - SCR.y - SCR.h / 2; const c = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, len), metal(0x222831)); c.position.set(dx, SCR.h / 2 + len / 2, -0.05); scrG.add(c); }
+const scrBack = new THREE.Mesh(new THREE.BoxGeometry(SCR.w + 0.24, SCR.h + 0.24, 0.08), metal(0xffffff, 0.5, 0.05)); scrBack.position.z = -0.06; scrG.add(scrBack);
+for (const dx of [-SCR.w / 3, SCR.w / 3]) { const len = ROOM.wallH - SCR.y - SCR.h / 2; const c = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, len), metal(0xbfb4a8)); c.position.set(dx, SCR.h / 2 + len / 2, -0.05); scrG.add(c); }
 const SCR_WORLD = new THREE.Vector3(SCR.x, SCR.y - 0.6, SCR.z);
 
 const deckShares = []; let shareCount = 0;
@@ -317,7 +319,7 @@ function aiTask(h) {
 /* drill sparks */
 const SPN = 240; const spPos = new Float32Array(SPN * 3).map((_, i) => (i % 3 === 1 ? -500 : 0)), spVel = new Float32Array(SPN * 3), spLife = new Float32Array(SPN);
 const sparkGeo = new THREE.BufferGeometry(); sparkGeo.setAttribute('position', new THREE.BufferAttribute(spPos, 3));
-const sparkPts = new THREE.Points(sparkGeo, new THREE.PointsMaterial({ color: 0xffc070, size: 0.06, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false })); sparkPts.frustumCulled = false; scene.add(sparkPts);
+const sparkPts = new THREE.Points(sparkGeo, new THREE.PointsMaterial({ color: 0xff8a3d, size: 0.07, transparent: true, depthWrite: false })); sparkPts.frustumCulled = false; scene.add(sparkPts);
 let spI = 0; const tmpV = new THREE.Vector3();
 function emitSparks(p, n) { for (let i = 0; i < n; i++) { const k = spI++ % SPN; spPos[k * 3] = p.x; spPos[k * 3 + 1] = p.y; spPos[k * 3 + 2] = p.z; spVel[k * 3] = (Math.random() - 0.5) * 2.4; spVel[k * 3 + 1] = Math.random() * 2.2; spVel[k * 3 + 2] = (Math.random() - 0.5) * 2.4; spLife[k] = 0.4 + Math.random() * 0.4; } }
 function updateSparks(dt) { for (let k = 0; k < SPN; k++) { if (spLife[k] <= 0) { spPos[k * 3] = 0; spPos[k * 3 + 1] = -500; spPos[k * 3 + 2] = 0; continue; } spLife[k] -= dt; spVel[k * 3 + 1] -= 6 * dt; spPos[k * 3] += spVel[k * 3] * dt; spPos[k * 3 + 1] += spVel[k * 3 + 1] * dt; spPos[k * 3 + 2] += spVel[k * 3 + 2] * dt; } sparkGeo.attributes.position.needsUpdate = true; }
@@ -359,7 +361,7 @@ function updateHuman(h, dt, now) {
 /* ───────── drips: a coin of light flies from a tower to the faucet screen ───────── */
 const coins = []; const coinGeo = new THREE.SphereGeometry(0.1, 12, 8);
 function flyCoin(from, you) {
-  const m = new THREE.Mesh(coinGeo, new THREE.MeshBasicMaterial({ color: you ? 0xffd08a : ACC, transparent: true, toneMapped: false }));
+  const m = new THREE.Mesh(coinGeo, new THREE.MeshBasicMaterial({ color: you ? 0xffb347 : ACC, transparent: true, toneMapped: false }));
   m.position.copy(from); scene.add(m);
   coins.push({ m, a: from.clone(), b: SCR_WORLD.clone().add(new THREE.Vector3((Math.random() - 0.5) * 3, 0, 0.3)), t: 0 });
 }
@@ -416,12 +418,13 @@ agentWorker.onmessage = e => {
   if (m.type === 'stat') { for (const s of m.jobs) { const h = byName[s.id]; if (!h) continue; h.stat = s; h.bestZ = Math.max(h.bestZ || 0, s.bestZ || 0); if (s.best) { h.hashes.push(s.best); if (h.hashes.length > 12) h.hashes.shift(); } } return; }
   if (m.type === 'share') {
     const h = byName[m.id]; if (!h) return; shareCount++; h.shares++; h.lastShare = { zeros: m.zeros, t: Date.now(), hash: m.hash }; h.bestZ = Math.max(h.bestZ || 0, m.zeros); h.flash = performance.now();
-    h.hashes.push(m.hash); if (!h.carrying) react(h, m.zeros >= m.bits + 3 ? 'cheer' : 'point'); showTag(h, `share · ${m.zeros} zero bits`, 'up');
+    h.hashes.push(m.hash); if (!h.carrying) react(h, m.zeros >= m.bits + 3 ? 'cheer' : 'point'); showTag(h, `share for ${h.wallet ? short(h.wallet) : h.label} · ${m.zeros} bits`, 'up');
     const t = h.tower; flyCoin(new THREE.Vector3(t.x + t.face * 0.6, RACK_H * 1.6, t.z), false);
     deckShares.unshift({ name: h.label, hash: m.hash, zeros: m.zeros, t: Date.now() }); deckShares.length = Math.min(deckShares.length, 20);
-    logLine(h.label, `share ${hz(m.hash)} · ${m.zeros} bits on tip <a href="${blockUrl(m.height)}" target="_blank" rel="noopener">#${fmt(m.height)}</a>`, 'gain');
-    bus.send('agent-share', { name: h.label, hash: m.hash, zeros: m.zeros, bits: m.bits, height: m.height });
-    window.dispatchEvent(new CustomEvent('deck:share', { detail: { name: h.label, hash: m.hash, zeros: m.zeros, height: m.height } }));
+    logLine(h.label, `share ${hz(m.hash)} · ${m.zeros} bits for ${h.wallet ? `<a href="https://mempool.space/address/${h.wallet}" target="_blank" rel="noopener">${short(h.wallet)}</a>` : 'the hall'} on tip <a href="${blockUrl(m.height)}" target="_blank" rel="noopener">#${fmt(m.height)}</a>`, 'gain');
+    h.mined = (h.mined || 0) + Math.round(10 * Math.pow(2, m.bits - 20) * eraFactor(m.height) * 100) / 100;   // uBTC credited to this agent's wallet, same rate as your rig
+    bus.send('agent-share', { name: h.label, wallet: h.wallet, hash: m.hash, zeros: m.zeros, bits: m.bits, height: m.height });
+    window.dispatchEvent(new CustomEvent('deck:share', { detail: { name: h.label, wallet: h.wallet, hash: m.hash, zeros: m.zeros, height: m.height } }));
     drawTower(h); drawWall();
   }
 };
@@ -463,12 +466,15 @@ function onClaim(c) {
 /* ───────── boot ───────── */
 (async () => {
   logLine('hall', 'powering the mining hall…');
-  await loadModels();
+  // each agent mines for a bitcoin wallet first funded in the last 24 h (data/fresh-wallets.json, tools/fresh_wallets.py)
+  const [, fw] = await Promise.all([loadModels(), fetch('data/fresh-wallets.json', { cache: 'no-store' }).then(r => r.json()).catch(() => null)]);
+  if (fw) AGENTS.forEach((a, i) => { const w = fw.wallets[i]; if (w) { a.wallet = w.address; a.fresh = w; } });
+  window.__FRESH = fw;
   buildTowers(); buildFront();
   const tAt = ([row, slot]) => { const list = towers.filter(t => t.row === row); return list[Math.min(slot, list.length - 1)]; };
   AGENTS.forEach((a, i) => {
     const t = tAt(a.tower); towerScreen(t);
-    const h = makeHuman({ label: a.name, note: a.note, x: t.stand.x, z: t.stand.z }); h.tower = t; byName[a.name] = h;
+    const h = makeHuman({ label: a.name, note: a.note, wallet: a.wallet, fresh: a.fresh, x: t.stand.x, z: t.stand.z }); h.tower = t; byName[a.name] = h;
     holdTool(h, i % 2 ? 'drill' : 'tools'); h.task = 'service'; arrive(h); h.workUntil = performance.now() / 1000 + 2 + i * 1.3;
   });
   const yt = tAt(YOU_TOWER); towerScreen(yt);
@@ -476,7 +482,7 @@ function onClaim(c) {
   ai = makeHuman({ label: 'ONBOARD AI', ai: true, x: -2, z: LANE_Z }); ai.state = 'idle'; ai.workUntil = performance.now() / 1000 + 3;
   $('#loading') && $('#loading').classList.add('off');
   logLine('hall', `${towers.length} towers on the floor · 7 agents at work · the onboard AI is patrolling`);
-  agentWorker.postMessage({ type: 'jobs', jobs: AGENTS.map(a => ({ id: a.name, key: 'agent:' + a.name, targetSec: 45, minBits: 12, startBits: 16 })) });
+  agentWorker.postMessage({ type: 'jobs', jobs: AGENTS.map(a => ({ id: a.name, key: a.wallet || 'agent:' + a.name, targetSec: 45, minBits: 12, startBits: 18 })) });
   agentWorker.postMessage({ type: 'duty', duty: AGENT_DUTY });
   if (chain.tip) agentWorker.postMessage({ type: 'tip', tip: chain.tip });
   agentWorker.postMessage({ type: 'run', on: true });

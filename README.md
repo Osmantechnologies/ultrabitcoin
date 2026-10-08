@@ -14,7 +14,7 @@ a Newcomb's-problem question set aboard the intergalactic Kaan cruiser, where an
   call with a SHA-256 commitment before you choose; the reveal is checked on the page.
 - **Your rig**: a Web Worker runs double SHA-256 over an 80-byte header built like Bitcoin's (real tip hash, a miner key,
   height, time, nonce) against an easier, self-retargeting target. Shares can be re-checked with the browser's WebCrypto.
-- **The mining hall** (three.js): rows of stacked mining towers, seven starburst agents walking the aisles with tools,
+- **The mining hall** (three.js, light room): stacked mining towers, seven starburst agents with tools, a build bay, an onboard AI on patrol. Each agent mines for a Bitcoin wallet first funded in the last 24 hours (`data/fresh-wallets.json`, found by `tools/fresh_wallets.py` from mempool.space).
   hauling crates to a build bay, and an onboard AI on patrol. Their shares are real hashes from a second worker.
 - **The lock**: every vault opens at Bitcoin block **16,738,498** = launch height 970,498 + 300 × 52,560 blocks.
   Drip and share amounts halve with Bitcoin's own halvings.

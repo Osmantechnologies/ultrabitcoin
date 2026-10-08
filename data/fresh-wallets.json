@@ -1,0 +1,178 @@
+{
+ "fetched_at": "2026-10-08T15:34:42Z",
+ "tip": 970508,
+ "rule": "first transaction confirmed < 24h before fetched_at; >= 0.02 BTC received; <= 8 txs",
+ "source": "mempool.space",
+ "wallets": [
+  {
+   "address": "bc1qsvg7z6re84xzcqequdp9jf23e0p90edmnrt5ln",
+   "first_funded": "2026-10-08T04:11:19Z",
+   "first_txid": "c63abcdba3b4405a0a42ad22cb0aa363f2f41f48c8d9a8a357acb4538e4f6c6a",
+   "funded_btc": 1.0,
+   "balance_btc": 1.0,
+   "tx_count": 1
+  },
+  {
+   "address": "bc1qys7t9afhypzs6vac2pyfp6mydr4uutqszjz63t",
+   "first_funded": "2026-10-07T23:17:27Z",
+   "first_txid": "1c607cf1899285f26cb50296b5cafcd45907a18c31bdb670dab80b6239c7aa45",
+   "funded_btc": 0.28592368,
+   "balance_btc": 0.28592368,
+   "tx_count": 1
+  },
+  {
+   "address": "bc1qe9pd5s47rq8ls8ee8h80gwnr8595vx4kgtenjs",
+   "first_funded": "2026-10-07T21:35:04Z",
+   "first_txid": "e393242e179b776b8ff7e41f4fb352b66467173fe3a55da0a264cdce6f56a490",
+   "funded_btc": 0.065013,
+   "balance_btc": 0.065013,
+   "tx_count": 1
+  },
+  {
+   "address": "bc1qyjkn8t7kunj6cvswy6lz5jg99pjt43q2euk0w6",
+   "first_funded": "2026-10-08T04:11:19Z",
+   "first_txid": "d1db50b21d5b87b7db2b2b5ca10486b1596d6b492ceb2b4be6129fd97882ed1d",
+   "funded_btc": 0.0434395,
+   "balance_btc": 0.0434395,
+   "tx_count": 1
+  },
+  {
+   "address": "bc1qlyfm68flzl6jfnht78ecnmj0p0wxdadgqh63yc",
+   "first_funded": "2026-10-07T20:32:37Z",
+   "first_txid": "205d4019853ac594c72bce11f4347d19f18543dcac96cffcffec1244b581240a",
+   "funded_btc": 0.03592,
+   "balance_btc": 0.03592,
+   "tx_count": 1
+  },
+  {
+   "address": "bc1q4l382zyx5ex2sl80k2nsgx0e80f9nv0mzrxw50",
+   "first_funded": "2026-10-07T19:06:50Z",
+   "first_txid": "034811bc5822e10d1234d6fc8013fb4ec11d86d0f1a901b70cc1257a463508b8",
+   "funded_btc": 0.03413852,
+   "balance_btc": 0.00017336,
+   "tx_count": 5
+  },
+  {
+   "address": "bc1qr8faqvrfdup65965wnjl5s0lg3d8xavqavwuus",
+   "first_funded": "2026-10-08T01:45:08Z",
+   "first_txid": "dccf67b71d690e37eceb1797a87fdb35a92b5949e0431bf85a21fdf6ba51814d",
+   "funded_btc": 0.02376723,
+   "balance_btc": 0.02376723,
+   "tx_count": 1
+  }
+ ],
+ "reserve": [
+  {
+   "address": "168KXscBe764dQrcfrLPHPXQNoSZxMGAw4",
+   "first_funded": "2026-10-08T07:29:57Z",
+   "first_txid": "dc3ad6787abc8f6e01d8efea177c645f533b462644028d3d645654b04826ebf0",
+   "funded_btc": 0.0236383,
+   "balance_btc": 0.0236383,
+   "tx_count": 1
+  },
+  {
+   "address": "bc1qxg8re2xm7hs60k869wm29w3z3xfy6vwtuxsyyt",
+   "first_funded": "2026-10-08T07:01:53Z",
+   "first_txid": "6499b391b026bf62b7b253a3615f3889f090051a73e75242bad2eeda3461c4af",
+   "funded_btc": 3.16396743,
+   "balance_btc": 0.0,
+   "tx_count": 6
+  },
+  {
+   "address": "bc1q2qgzxf7dutheacw5kz5mfcmkl4z3mggu0hq5m5",
+   "first_funded": "2026-10-08T01:27:13Z",
+   "first_txid": "ef274dcceafe149c0ff5ac2d1d20a7807fb210daf76e28f9810c772030b71b6a",
+   "funded_btc": 0.5845952,
+   "balance_btc": 0.0,
+   "tx_count": 4
+  },
+  {
+   "address": "bc1qzzgnl88rw9kjh6yjnqnj95t7cg93zt590udmk3",
+   "first_funded": "2026-10-08T01:45:08Z",
+   "first_txid": "ed7cc8e6194b25af681e11a6f8a7d0847bf03dafcf09a4f15a4a5f4746dc59c7",
+   "funded_btc": 0.21685924,
+   "balance_btc": 0.0,
+   "tx_count": 2
+  },
+  {
+   "address": "bc1qk3t5s0w494ptvcns7d5cr34f6gueja7l7682eg",
+   "first_funded": "2026-10-08T07:29:57Z",
+   "first_txid": "4eb34fcbb540488514720973d3f9004379e8a03cf674a162881495c78323eafa",
+   "funded_btc": 0.119823,
+   "balance_btc": 0.0,
+   "tx_count": 2
+  },
+  {
+   "address": "bc1qxjq8q0z0t4lakqtjq2muq8e7fdju4ddk3slgyd",
+   "first_funded": "2026-10-08T15:23:34Z",
+   "first_txid": "f884f3f3ecca4076cc7532ad66ce562882dbb34780fe531986e4fab37625b518",
+   "funded_btc": 0.1,
+   "balance_btc": 0.0,
+   "tx_count": 2
+  },
+  {
+   "address": "3QqVvcsEZAs3tSWxE9D3ob99RKo4JF63Kw",
+   "first_funded": "2026-10-08T11:16:00Z",
+   "first_txid": "90b02762ede6ffcc4e8d0c078c55deaa4fb79ccbba16022ad20e619d48c0bcfd",
+   "funded_btc": 0.08230209,
+   "balance_btc": 0.0,
+   "tx_count": 2
+  },
+  {
+   "address": "bc1qrqklr5g9xgraguys3et88snfzljf7sg83y2vmm",
+   "first_funded": "2026-10-08T07:09:38Z",
+   "first_txid": "b82b25813012cfa3e99a360e6fbd7af04252d2806aea469362ccde9ffc6a0fd5",
+   "funded_btc": 0.08,
+   "balance_btc": 0.0,
+   "tx_count": 3
+  },
+  {
+   "address": "bc1q7yfrdnsr9pjzme36rn43f6gpmjqpf2sefs3jks",
+   "first_funded": "2026-10-08T07:09:38Z",
+   "first_txid": "45dc98d5c28d5cf015b20db5f74754a8f9c42c125c51d75ee8d2becf2a99d25f",
+   "funded_btc": 0.08,
+   "balance_btc": 0.0,
+   "tx_count": 3
+  },
+  {
+   "address": "bc1qnxkyn9vucdhejycwh32h5ex0lqaan5l0zl866l",
+   "first_funded": "2026-10-08T10:33:58Z",
+   "first_txid": "a75850f8ecfa68669869039ca25d9e511b9afb89da5a82d4ba1b3a91a2b22ae9",
+   "funded_btc": 0.0353032,
+   "balance_btc": 0.0,
+   "tx_count": 2
+  },
+  {
+   "address": "bc1q9zj8mvtnh8kf2hskhhxx27662vef73ykgjnr78",
+   "first_funded": "2026-10-07T18:51:01Z",
+   "first_txid": "a7bf8a88a5cdfbde30acbd306cb9a8e53e92a101f2186b09b0055b1cb2ba12f8",
+   "funded_btc": 0.03085632,
+   "balance_btc": 0.0,
+   "tx_count": 2
+  },
+  {
+   "address": "bc1q2nwmw6d84meavvhvgzsr3xdupfjm0u03mgx90r",
+   "first_funded": "2026-10-07T20:02:07Z",
+   "first_txid": "c1ee15a4ba4cf27ed77b6e71311f2ce9c7bf65826e214e97d3052514817a1410",
+   "funded_btc": 0.02554019,
+   "balance_btc": 0.0,
+   "tx_count": 2
+  },
+  {
+   "address": "bc1qsj0q6r3snm6ax7zq6m50w5zlck9c2pz2k62jhz",
+   "first_funded": "2026-10-08T01:35:02Z",
+   "first_txid": "119fdcdc4f77fc330e9fab0df8e176a900247be2e3bf0d1980ca7e8a594982d1",
+   "funded_btc": 0.02182661,
+   "balance_btc": 0.0,
+   "tx_count": 2
+  },
+  {
+   "address": "bc1qa8q2jp8fygwc3l74ugh9ksscj0ju2vysnm0r05",
+   "first_funded": "2026-10-08T11:16:00Z",
+   "first_txid": "c431d57017fc1532af9e9ab73e0ef4ad05d8f336eba1ef1dffbf5020448e185d",
+   "funded_btc": 0.02116468,
+   "balance_btc": 0.0,
+   "tx_count": 2
+  }
+ ]
+}
