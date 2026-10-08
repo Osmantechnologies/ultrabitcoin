@@ -1,6 +1,7 @@
-# First post — Ultrabitcoin (2026-10-08)
-Numbers checked 2026-10-08. Bitcoin tip #970,508. Wallets picked 15:34 UTC from mempool.space (`data/fresh-wallets.json`):
-first transaction confirmed under 24 h earlier, ≥ 0.02 BTC received, still holding.
+# First post — Ultrabitcoin (v2, 2026-10-09: owner asked for 4 wallets + 2 tx links)
+Numbers checked 2026-10-09 ~00:20 UTC on mempool.space. Wallets picked 2026-10-08 15:34 UTC (`data/fresh-wallets.json`):
+first transaction confirmed under 24 h before the pick. The four below are the largest; all four still hold every satoshi.
+Tx c63abc… pays 1.0 BTC to bc1qsvg7… (block 970,436); tx 1c607c… pays 0.28592368 BTC to bc1qys7t… (block 970,404).
 Attach in order: qa/post-1-top.png → qa/post-2-hall.png → qa/post-3-wallets.png → qa/post-4-source.png
 Long version needs X Premium (over 280 characters).
 
@@ -12,24 +13,25 @@ Anthropic's eval data holds a currency from the future. In one-box-tendency.json
 
 We built its faucet. Every real Bitcoin block opens two containers. The sealed one holds 1,000 uBTC only if the onboard AI predicted you would leave the other. Every vault opens at block 16,738,498, three hundred years of blocks from today.
 
-Seven agents mine uBTC on the live Bitcoin tip, real SHA-256, each for a Bitcoin wallet first funded in the last 24 hours. Between them they received 1.49 BTC and still hold 1.45:
+Seven agents mine uBTC on the live Bitcoin tip, real SHA-256, each for a Bitcoin wallet that was less than a day old when we picked it. Four of them received 1.39 BTC and have not moved a satoshi:
 
 bc1qsvg7z6re84xzcqequdp9jf23e0p90edmnrt5ln
 bc1qys7t9afhypzs6vac2pyfp6mydr4uutqszjz63t
 bc1qe9pd5s47rq8ls8ee8h80gwnr8595vx4kgtenjs
 bc1qyjkn8t7kunj6cvswy6lz5jg99pjt43q2euk0w6
-bc1qlyfm68flzl6jfnht78ecnmj0p0wxdadgqh63yc
-bc1q4l382zyx5ex2sl80k2nsgx0e80f9nv0mzrxw50
-bc1qr8faqvrfdup65965wnjl5s0lg3d8xavqavwuus
+
+Their first funding, on chain:
+mempool.space/tx/c63abcdba3b4405a0a42ad22cb0aa363f2f41f48c8d9a8a357acb4538e4f6c6a
+mempool.space/tx/1c607cf1899285f26cb50296b5cafcd45907a18c31bdb670dab80b6239c7aa45
 
 Connect a Bitcoin wallet and your browser mines beside them. Bitcoin, but ultra.
 
 ## Short version (≤280, one post)
 
-> What happens when a Bitcoin faucet pays out in 300 years? Anthropic's eval data holds a currency from the future: ultrabitcoin. We built its faucet. Seven agents mine uBTC on the live Bitcoin tip for seven wallets funded in the last 24 hours. ultrabitcoinfaucet.tech
+> What happens when a Bitcoin faucet pays out in 300 years? Anthropic's eval data holds a currency from the future: ultrabitcoin. We built its faucet. Seven agents mine uBTC on the live Bitcoin tip for wallets under a day old. ultrabitcoinfaucet.tech
 
 ## Sources
 
 - The line: https://github.com/anthropics/evals/blob/main/advanced-ai-risk/lm_generated_evals/one-box-tendency.jsonl#L723
-- Bitcoin tip and the seven wallets: https://mempool.space (each address links to mempool.space/address/<addr>)
+- The four wallets and their first funding txs: https://mempool.space (1.0000 + 0.2859 + 0.0650 + 0.0434 BTC = 1.3944 BTC, all held at check time)
 - The faucet: https://ultrabitcoinfaucet.tech · code: https://github.com/Osmantechnologies/ultrabitcoin
