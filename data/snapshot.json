@@ -38,5 +38,80 @@
    }
   }
  },
- "ours": null
+ "ours": {
+  "repo": {
+   "full_name": "Osmantechnologies/ultrabitcoin",
+   "stargazers_count": 0,
+   "forks_count": 0,
+   "pushed_at": "2026-10-08T14:46:08Z",
+   "html_url": "https://github.com/Osmantechnologies/ultrabitcoin",
+   "size": 0,
+   "language": "JavaScript"
+  },
+  "commits": [
+   {
+    "sha": "d11c79eed2d12df19a22419dfd48d856dc291289",
+    "date": "2026-10-08T14:45:47Z",
+    "msg": "Ultrabitcoin v0.2.0: uBTC faucet, mining hall, live sources",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/commit/d11c79eed2d12df19a22419dfd48d856dc291289"
+   }
+  ],
+  "tree": [
+   {
+    "name": ".gitignore",
+    "type": "file",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/blob/main/.gitignore"
+   },
+   {
+    "name": "README.md",
+    "type": "file",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/blob/main/README.md"
+   },
+   {
+    "name": "css",
+    "type": "dir",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/tree/main/css"
+   },
+   {
+    "name": "data",
+    "type": "dir",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/tree/main/data"
+   },
+   {
+    "name": "img",
+    "type": "dir",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/tree/main/img"
+   },
+   {
+    "name": "index.html",
+    "type": "file",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/blob/main/index.html"
+   },
+   {
+    "name": "js",
+    "type": "dir",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/tree/main/js"
+   },
+   {
+    "name": "models",
+    "type": "dir",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/tree/main/models"
+   },
+   {
+    "name": "qa",
+    "type": "dir",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/tree/main/qa"
+   },
+   {
+    "name": "vendor",
+    "type": "dir",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/tree/main/vendor"
+   },
+   {
+    "name": "version.txt",
+    "type": "file",
+    "url": "https://github.com/Osmantechnologies/ultrabitcoin/blob/main/version.txt"
+   }
+  ]
+ }
 }
