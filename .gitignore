@@ -5,3 +5,4 @@ qa/*.jpg
 .gstack/
 art-src/*-hd.glb
 deploy/
+.netlify/
