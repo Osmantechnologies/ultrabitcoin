@@ -1,6 +1,7 @@
 /* faucet-ui.js — the faucet as three terminal panes (wallet/vault · drip · rig) plus the ledger.
    mountFaucet({ wallet, drip, rig, ledger }) fills the pane bodies; pane-bar meta goes in [data-fxbar=…]. */
-import { chain, wallet, vault, rig, WALLETS, RELEASE_HEIGHT, DRIP, OPEN_BOX, eraFactor, release, fmt, ubtc, short, blockUrl, sha256hex, verifyShare } from './core.js';
+import { openConnect } from './connect.js';
+import { chain, wallet, vault, rig, balance, RELEASE_HEIGHT, DRIP, OPEN_BOX, eraFactor, release, fmt, ubtc, short, blockUrl, sha256hex, verifyShare } from './core.js';
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ago = t => { const s = Math.max(0, Date.now() / 1000 - t); return s < 60 ? Math.round(s) + 's' : s < 3600 ? Math.round(s / 60) + 'm' : (s / 3600).toFixed(1) + 'h'; };
@@ -28,25 +29,23 @@ export function mountFaucet(P) {
       bar('wallet', 'not connected');
       el.innerHTML = `
         <p class="fxl">Connect a Bitcoin wallet. The faucet reads your <b>address</b> and nothing else, and never builds a transaction.</p>
-        <div class="wl">${WALLETS.map(w => `<button data-w="${w.id}">${w.name}<em class="${w.has() ? 'ok' : ''}">${w.has() ? 'Detected' : 'Get ↗'}</em></button>`).join('')}</div>
+        <div class="wl">${wallet.list().slice(0, 6).map(w => `<button data-w="${w.id}">${w.name}<em class="${w.has() ? 'ok' : ''}">${w.has() ? 'Detected' : 'Get ↗'}</em></button>`).join('')}</div>
+        <button class="fxb fxb--leg fx-connect" data-act="connect">Connect wallet</button>
         <form class="paste"><span class="chev">❯</span><input name="a" autocomplete="off" spellcheck="false" aria-label="Bitcoin address" placeholder="or paste any address: bc1q… 1… 3…"><button>Use</button></form>`;
-      el.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', async () => {
-        b.classList.add('busy');
-        try { await wallet.connect(b.dataset.w); toast('Connected ' + short(addr())); }
-        catch (e) { toast(e.message || 'connection rejected', true); }
-        b.classList.remove('busy');
-      }));
+      el.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => openConnect(b.dataset.w)));
+      el.querySelector('[data-act=connect]').addEventListener('click', () => openConnect());
       el.querySelector('form').addEventListener('submit', e => { e.preventDefault(); try { wallet.watch(e.target.a.value); toast('Mining to ' + short(addr())); } catch (err) { toast(err.message, true); } });
       return;
     }
     const v = vault.of(a), h = tipH(), r = h ? release(h) : null, kind = wallet.current.kind;
-    const wname = kind === 'address' ? 'pasted address' : (WALLETS.find(w => w.id === kind) || {}).name;
+    const wname = kind === 'address' ? 'pasted address' : (wallet.current.name || (wallet.find(kind) || {}).name || kind);
     bar('wallet', esc(short(a)));
     el.innerHTML = `
       <div class="vault"><span class="n">${ubtc(v.total)}</span><span class="u">uBTC</span></div>
       <dl class="rules">
         <dt>Address</dt><dd><a href="https://mempool.space/address/${esc(a)}" target="_blank" rel="noopener">${esc(a)}</a></dd>
-        <dt>Via</dt><dd>${esc(wname || '')}</dd>
+        <dt>Via</dt><dd>${esc(wname || '')}${wallet.current.type ? ' · ' + esc(wallet.current.type) : ''}</dd>
+        <dt>On-chain</dt><dd>${balance.addr === a && balance.btc != null ? balance.btc.toFixed(8) + ' BTC' : 'reading…'}</dd>
         <dt>Locked until</dt><dd><a href="${blockUrl(RELEASE_HEIGHT)}" target="_blank" rel="noopener">#${fmt(RELEASE_HEIGHT)}</a></dd>
         <dt>Blocks left</dt><dd>${r ? fmt(r.left) : '—'}</dd>
         <dt>Years left</dt><dd>${r ? r.years.toFixed(5) : '—'}</dd>
@@ -142,7 +141,7 @@ export function mountFaucet(P) {
 
   function all() { renderWallet(); renderDrip(); renderRig(); renderLedger(); }
   all();
-  wallet.on('change', all);
+  wallet.on('change', all); balance.on('change', renderWallet);
   vault.on('change', () => { renderWallet(); renderDrip(); renderLedger(); patchRig(); });
   chain.on('tip', () => { renderWallet(); renderDrip(); });
   rig.on('state', renderRig); rig.on('share', renderRig); rig.on('stat', patchRig);

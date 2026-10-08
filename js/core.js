@@ -88,61 +88,128 @@ function slim(b) { return { height: b.height, hash: b.id, time: b.timestamp, txs
 export const blockUrl = h => `https://mempool.space/block/${h}`;
 
 /* ───────── wallet ───────── */
+// Read-only Bitcoin wallet connectors. connect() returns every address the wallet offers as
+// [{ address, purpose: 'payment' | 'ordinals', type }] so the page can let you pick which one mines.
+// Nothing here ever builds, signs or broadcasts a transaction; sign() is a plain message for the vault.
 const W = window;
-export const WALLETS = [
+export const addrType = a => /^bc1p/i.test(a) ? 'taproot' : /^bc1q/i.test(a) ? 'native segwit' : /^3/.test(a) ? 'nested segwit' : /^1/.test(a) ? 'legacy' : 'address';
+const acct = (address, purpose) => ({ address, purpose: purpose || (addrType(address) === 'taproot' ? 'ordinals' : 'payment'), type: addrType(address) });
+const unwrap = r => { if (r && r.error) throw new Error(r.error.message || 'request rejected'); return r && r.result !== undefined ? r.result : r; };
+// sats-connect style providers announce themselves on window.btc_providers: [{ id: 'XverseProviders.BitcoinProvider', name, icon, webUrl }]
+const announced = () => (Array.isArray(W.btc_providers) ? W.btc_providers : []);
+const resolvePath = path => path.split('.').reduce((o, k) => (o ? o[k] : undefined), W);
+const iconFor = re => { const p = announced().find(p => re.test(p.name || '') || re.test(p.id || '')); return p && p.icon; };
+async function satsAccounts(prov, message) {
+  let r = unwrap(await prov.request('getAccounts', { purposes: ['payment', 'ordinals'], message }));
+  const list = Array.isArray(r) ? r : (r && (r.addresses || r.accounts)) || [];
+  return list.filter(x => x && x.address && !/^tb1|^bcrt1|^[mn2]/.test(x.address)).map(x => acct(x.address, x.purpose));
+}
+const KNOWN = [
   {
     id: 'unisat', name: 'UniSat', site: 'https://unisat.io', has: () => !!W.unisat,
-    async connect() { const a = await W.unisat.requestAccounts(); return a[0]; },
+    async connect() { const a = await W.unisat.requestAccounts(); return (a || []).map(x => acct(x)); },
+    async restore() { const a = await W.unisat.getAccounts(); return a && a[0]; },
     async sign(addr, msg) { return W.unisat.signMessage(msg); },
+    watch(cb) { if (W.unisat && W.unisat.on) W.unisat.on('accountsChanged', a => cb(a && a[0])); },
   },
   {
-    id: 'xverse', name: 'Xverse', site: 'https://www.xverse.app', has: () => !!(W.XverseProviders && W.XverseProviders.BitcoinProvider) || !!W.BitcoinProvider,
-    prov: () => (W.XverseProviders && W.XverseProviders.BitcoinProvider) || W.BitcoinProvider,
-    async connect() {
-      const r = await this.prov().request('getAccounts', { purposes: ['payment', 'ordinals'], message: 'Connect to the Ultrabitcoin faucet' });
-      if (r && r.error) throw new Error(r.error.message || 'rejected');
-      const list = (r && r.result) || r || []; const arr = Array.isArray(list) ? list : list.addresses || [];
-      const pay = arr.find(x => x.purpose === 'payment') || arr[0]; return pay && pay.address;
-    },
-    async sign(addr, msg) { const r = await this.prov().request('signMessage', { address: addr, message: msg }); if (r && r.error) throw new Error(r.error.message); return (r.result && r.result.signature) || r.signature; },
+    id: 'xverse', name: 'Xverse', site: 'https://www.xverse.app', has: () => !!(W.XverseProviders && W.XverseProviders.BitcoinProvider),
+    icon: () => iconFor(/xverse/i),
+    async connect() { return satsAccounts(W.XverseProviders.BitcoinProvider, 'Connect to the Ultrabitcoin faucet'); },
+    async sign(addr, msg) { const r = unwrap(await W.XverseProviders.BitcoinProvider.request('signMessage', { address: addr, message: msg })); return r && (r.signature || r); },
   },
   {
     id: 'leather', name: 'Leather', site: 'https://leather.io', has: () => !!W.LeatherProvider,
-    async connect() { const r = await W.LeatherProvider.request('getAddresses'); const a = (r.result && r.result.addresses) || []; const b = a.find(x => x.symbol === 'BTC' && x.type === 'p2wpkh') || a.find(x => x.symbol === 'BTC'); return b && b.address; },
-    async sign(addr, msg) { const r = await W.LeatherProvider.request('signMessage', { message: msg, paymentType: 'p2wpkh' }); return r.result && r.result.signature; },
+    icon: () => iconFor(/leather/i),
+    async connect() {
+      const r = unwrap(await W.LeatherProvider.request('getAddresses'));
+      return ((r && r.addresses) || []).filter(x => x.symbol === 'BTC' && x.address && /^(bc1|[13])/.test(x.address)).map(x => acct(x.address, x.type === 'p2tr' ? 'ordinals' : 'payment'));
+    },
+    async sign(addr, msg) { const r = unwrap(await W.LeatherProvider.request('signMessage', { message: msg, paymentType: addrType(addr) === 'taproot' ? 'p2tr' : 'p2wpkh' })); return r && (r.signature || r); },
   },
   {
-    id: 'okx', name: 'OKX Wallet', site: 'https://www.okx.com/web3', has: () => !!(W.okxwallet && W.okxwallet.bitcoin),
-    async connect() { const r = await W.okxwallet.bitcoin.connect(); return r.address; },
+    id: 'okx', name: 'OKX Wallet', site: 'https://web3.okx.com', has: () => !!(W.okxwallet && W.okxwallet.bitcoin),
+    async connect() { const r = await W.okxwallet.bitcoin.connect(); return r && r.address ? [acct(r.address)] : []; },
+    async restore() { const a = await W.okxwallet.bitcoin.getAccounts(); return a && a[0]; },
     async sign(addr, msg) { return W.okxwallet.bitcoin.signMessage(msg, 'ecdsa'); },
+    watch(cb) { const b = W.okxwallet && W.okxwallet.bitcoin; if (b && b.on) b.on('accountChanged', a => cb(a && (a.address || a))); },
   },
   {
     id: 'phantom', name: 'Phantom', site: 'https://phantom.com', has: () => !!(W.phantom && W.phantom.bitcoin && W.phantom.bitcoin.isPhantom),
-    async connect() { const a = await W.phantom.bitcoin.requestAccounts(); const p = a.find(x => x.purpose === 'payment') || a[0]; return p && p.address; },
+    async connect() { const a = await W.phantom.bitcoin.requestAccounts(); return (a || []).map(x => acct(x.address, x.purpose)); },
     async sign(addr, msg) { const r = await W.phantom.bitcoin.signMessage(addr, new TextEncoder().encode(msg)); return btoa(String.fromCharCode(...r.signature)); },
   },
 ];
+// the list shown to people: the known five, plus any other announced sats-connect wallet (Magic Eden and friends)
+export function walletList() {
+  const extra = announced().filter(p => p && p.id && !/xverse|leather/i.test(p.id + ' ' + (p.name || ''))).map(p => ({
+    id: 'sc:' + p.id, name: p.name || p.id, site: p.webUrl || p.chromeWebStoreUrl || '#', icon: () => p.icon,
+    has: () => !!resolvePath(p.id),
+    async connect() { return satsAccounts(resolvePath(p.id), 'Connect to the Ultrabitcoin faucet'); },
+    async sign(addr, msg) { const r = unwrap(await resolvePath(p.id).request('signMessage', { address: addr, message: msg })); return r && (r.signature || r); },
+  }));
+  return [...KNOWN, ...extra].sort((a, b) => (b.has() ? 1 : 0) - (a.has() ? 1 : 0));
+}
+export const WALLETS = KNOWN;   // kept for older callers
+const findWallet = id => walletList().find(x => x.id === id);
 // mainnet addresses only: legacy 1…, script 3…, segwit/taproot bc1…
 export const validAddress = a => /^(bc1[02-9ac-hj-np-z]{11,87}|[13][1-9A-HJ-NP-Za-km-z]{25,34})$/.test(a.trim()) || /^bc1[02-9AC-HJ-NP-Z]{11,87}$/.test(a.trim());
+const friendly = e => {
+  const m = String((e && (e.message || e)) || '');
+  if (/reject|denied|cancel|declin|4001|user/i.test(m)) return 'You declined the request in your wallet.';
+  if (/timeout/i.test(m)) return 'Your wallet did not answer. Open it and try again.';
+  return m || 'The wallet returned an error.';
+};
 
 export const wallet = Object.assign(emitter(), {
-  current: LS.get('ubtc.wallet', null),   // {kind, address}
-  async connect(id) {
-    const w = WALLETS.find(x => x.id === id); if (!w) throw new Error('unknown wallet');
-    if (!w.has()) { window.open(w.site, '_blank', 'noopener'); throw new Error(w.name + ' is not installed in this browser'); }
-    const address = await timeout(w.connect(), 120000);
-    if (!address) throw new Error('no Bitcoin address returned');
-    this.set({ kind: id, address });
+  current: LS.get('ubtc.wallet', null),   // {kind, name, address, purpose, type}
+  list: walletList, find: findWallet,
+  // ask the wallet for its addresses; the caller picks one and calls use()
+  async accounts(id) {
+    const w = findWallet(id); if (!w) throw new Error('Unknown wallet');
+    if (!w.has()) { const e = new Error(w.name + ' is not installed in this browser'); e.install = w.site; throw e; }
+    let list;
+    try { list = await timeout(w.connect(), 120000); } catch (e) { throw new Error(friendly(e)); }
+    list = (list || []).filter(a => a && validAddress(a.address));
+    if (!list.length) throw new Error(w.name + ' returned no mainnet Bitcoin address. Switch it to Bitcoin mainnet and try again.');
+    return list;
   },
-  watch(addr) { addr = addr.trim(); if (!validAddress(addr)) throw new Error('That is not a mainnet Bitcoin address'); this.set({ kind: 'address', address: addr }); },
+  use(id, a) { const w = findWallet(id); this.set({ kind: id, name: w ? w.name : id, address: a.address, purpose: a.purpose, type: a.type }); },
+  async connect(id) { const l = await this.accounts(id); this.use(id, l.find(a => a.purpose === 'payment') || l[0]); },
+  watch(addr) { addr = addr.trim(); if (!validAddress(addr)) throw new Error('That is not a mainnet Bitcoin address'); this.set({ kind: 'address', name: 'Address', address: addr, purpose: 'payment', type: addrType(addr) }); },
   set(v) { this.current = v; LS.set('ubtc.wallet', v); this.emit('change', v); bus.send('wallet', v); },
   disconnect() { this.current = null; LS.set('ubtc.wallet', null); this.emit('change', null); bus.send('wallet', null); },
   async sign(msg) {
-    const c = this.current; const w = c && WALLETS.find(x => x.id === c.kind); if (!w) throw new Error('Connect a wallet extension to sign');
-    return w.sign(c.address, msg);
+    const c = this.current; const w = c && findWallet(c.kind); if (!w) throw new Error('Connect a wallet extension to sign');
+    try { return await w.sign(c.address, msg); } catch (e) { throw new Error(friendly(e)); }
+  },
+  // on load: re-check silently with wallets that can (UniSat, OKX) and follow account switches
+  async restore() {
+    const c = this.current; if (!c || c.kind === 'address') return;
+    const w = findWallet(c.kind); if (!w || !w.has()) return;
+    try { if (w.restore) { const a = await timeout(w.restore(), 4000); if (a && a !== c.address && validAddress(a)) this.use(c.kind, acct(a)); else if (!a) this.disconnect(); } } catch { }
+    if (w.watch) w.watch(a => { if (!this.current || this.current.kind !== w.id) return; if (!a) this.disconnect(); else if (validAddress(a) && a !== this.current.address) this.use(w.id, acct(a)); });
   },
 });
 bus.on('wallet', v => { wallet.current = v; wallet.emit('change', v); });
+// extensions inject late: restore once the page has settled
+setTimeout(() => wallet.restore(), 900);
+
+// live on-chain balance of the connected address (mempool.space)
+export const balance = Object.assign(emitter(), {
+  btc: null, addr: null,
+  async refresh() {
+    const c = wallet.current; if (!c) { this.btc = null; this.addr = null; this.emit('change'); return; }
+    try {
+      const r = await timeout(fetch(`https://mempool.space/api/address/${c.address}`), 8000); if (!r.ok) return;
+      const d = await r.json(); const s = d.chain_stats, m = d.mempool_stats;
+      this.btc = (s.funded_txo_sum - s.spent_txo_sum + m.funded_txo_sum - m.spent_txo_sum) / 1e8; this.addr = c.address; this.emit('change');
+    } catch { }
+  },
+});
+wallet.on('change', () => balance.refresh());
+setInterval(() => balance.refresh(), 60000);
+setTimeout(() => balance.refresh(), 1200);
 
 /* ───────── vault ───────── */
 const VKEY = 'ubtc.vaults.v1';

@@ -2,6 +2,7 @@
    The deck itself is sandbox.js; the faucet panes are faucet-ui.js. */
 import { chain, wallet, vault, rig, bus, RELEASE_HEIGHT, HALVING, DRIP, OPEN_BOX, SHARE_PER_2_20, EVAL_URL, era, eraFactor, nextHalving, release, fmt, ubtc, short, blockUrl, timeout } from './core.js';
 import { mountFaucet } from './faucet-ui.js';
+import { mountChip } from './connect.js';
 import './sandbox.js';
 import { initSources } from './github.js';
 
@@ -30,6 +31,7 @@ addEventListener('keydown', e => { if (e.target.closest('input,textarea') || e.m
 
 /* ───────── faucet panes ───────── */
 mountFaucet({ wallet: $('#fxWallet'), drip: $('#fxDrip'), rig: $('#fxRig'), ledger: $('#fxLedger') });
+mountChip($('#connectChip'));
 
 /* ───────── chain bar, vault block, status bar ───────── */
 function chainBar() {
@@ -49,7 +51,7 @@ function vaultBlock() {
   $('#vTotal').textContent = v ? ubtc(v.total) : '0'; $('#sVault').textContent = v ? ubtc(v.total) : '0';
   $('#vSub').textContent = c ? `${short(c.address)} · ${fmt(v.drips)} drips · ${fmt(v.shares)} shares` : 'connect a wallet to start';
   $('#vBtn').textContent = c ? (chain.tip && v.claims[chain.tip.height] ? 'drip claimed · see the faucet' : 'claim this block\'s drip') : 'open the faucet';
-  $('#connectChip').textContent = c ? short(c.address) : 'connect wallet';
+
 }
 function liveDot(s) {
   const el = $('#liveDot'); const live = s === 'live';

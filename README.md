@@ -21,7 +21,7 @@ a Newcomb's-problem question set aboard the intergalactic Kaan cruiser, where an
 - **Sources, live**: the eval file is read from raw.githubusercontent.com on each visit (with `data/snapshot.json` as a
   fallback), and this repo's commits are read from the GitHub API.
 
-Wallets (UniSat, Xverse, Leather, OKX, Phantom, or a pasted address) are read-only: the faucet asks for an address and
+Wallets connect through `js/connect.js`: UniSat, Xverse, Leather, OKX, Phantom, any wallet announced on `window.btc_providers`, or a pasted address. Multi-address wallets let you pick payment or taproot. It is read-only: the faucet asks for an address and
 never builds a transaction. uBTC is lore, not bitcoin, and is not for sale; vaults live in the visitor's browser.
 
 ## Run it
