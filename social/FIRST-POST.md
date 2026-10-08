@@ -30,7 +30,7 @@ Connect a Bitcoin wallet and your browser mines beside them. Bitcoin, but ultra.
 
 **Our goal.** A Bitcoin faucet that keeps a 300-year promise in the open. uBTC drips today, every vault opens at block 16,738,498, and real bitcoin waits for the same block.
 
-**Creator fees.** Every creator fee buys BTC and goes into one vault address locked by Bitcoin's own timelock until block 16,738,498. No key can move it before then, ours included. Every deposit is public on mempool.space, and the vault opens the same day the uBTC vaults do.
+**Creator fees.** They buy BTC, locked by Bitcoin's own timelock until block 16,738,498. No one can move it before then, us included.
 
 ## Short version (≤280, one post)
 

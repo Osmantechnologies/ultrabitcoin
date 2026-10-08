@@ -47,7 +47,7 @@
 
 <!-- ───────── 0:mine ───────── -->
 <main class="wrap view" id="v-mine">
-  <div class="prompt"><span>~/ultrabitcoin</span><span class="chev">❯</span><span class="cmd">ubtc mine --deck kaan --tip live</span><span class="cmt"># seven agents mine uBTC for seven bitcoin wallets first funded in the last 24 hours. connect a wallet to take the free tower.</span></div>
+  <div class="prompt"><span>~/ultrabitcoin</span><span class="chev">❯</span><span class="cmd">ubtc mine --deck kaan --tip live</span><span class="cmt"># seven agents mine uBTC for seven bitcoin wallets that were under a day old when we picked them. connect a wallet to take the free tower.</span></div>
 
   <div class="coinbar">
     <span class="coinbar__sym"><b>uBTC</b> <span class="dim">ultrabitcoin</span></span>
@@ -116,9 +116,29 @@
     </div>
   </div>
 
+  <div class="dash dash--goal" id="goal">
+    <div class="pane">
+      <div class="pane__bar">goal <span class="dim">why the faucet exists</span><span class="r">300 years</span></div>
+      <div class="pane__body goal">
+        <p class="goal__big">A Bitcoin faucet that keeps a 300-year promise in the open.</p>
+        <p>uBTC drips today, every vault opens at block <b>#16,738,498</b>, and real bitcoin waits for the same block.</p>
+      </div>
+    </div>
+    <div class="pane">
+      <div class="pane__bar">creator fees <span class="dim">→ the 300-year bitcoin vault</span><span class="r" id="vaultLeft">—</span></div>
+      <div class="pane__body goal">
+        <p>Creator fees buy BTC, locked by Bitcoin's own timelock until block <b>#16,738,498</b>. No one can move it before then, us included.</p>
+        <pre class="goal__script"><span class="c"># the vault's spending script</span>
+<span class="k">16738498</span> OP_CHECKLOCKTIMEVERIFY OP_DROP
+<span class="s">&lt;key&gt;</span> OP_CHECKSIG</pre>
+        <dl class="rules goal__dl"><dt>opens at</dt><dd>block #16,738,498 · the same block as every uBTC vault</dd><dt>deposits</dt><dd>public on mempool.space</dd><dt>address</dt><dd>published with the coin</dd></dl>
+      </div>
+    </div>
+  </div>
+
   <div class="dash dash--w" id="wallets">
     <div class="pane">
-      <div class="pane__bar">wallets <span class="dim">each agent mines uBTC for a bitcoin wallet first funded in the last 24 hours</span><span class="r" id="agMeta">—</span></div>
+      <div class="pane__bar">wallets <span class="dim">each agent mines uBTC for a bitcoin wallet that was under a day old when we picked it</span><span class="r" id="agMeta">—</span></div>
       <div id="agents"></div>
       <div class="pane__body note" id="wnote"></div>
     </div>
@@ -170,6 +190,8 @@
       <dt>the lock</dt><dd>every vault opens at bitcoin block 16,738,498: launch height 970,498 plus 300 × 52,560 blocks. at ten minutes a block, that is 300 years.</dd>
     </dl>
     <h3>uBTC</h3><p>in bitcoin, μBTC is a real unit: one millionth of a bitcoin, named "bits" in BIP 176. here the u stands for ultra.</p>
+    <h3>GOAL</h3><p>a bitcoin faucet that keeps a 300-year promise in the open. uBTC drips today, every vault opens at block 16,738,498, and real bitcoin waits for the same block.</p>
+    <h3>CREATOR FEES</h3><p>creator fees buy BTC, locked by Bitcoin's own timelock until block 16,738,498: <code>16738498 OP_CHECKLOCKTIMEVERIFY OP_DROP &lt;key&gt; OP_CHECKSIG</code>. no one can move it before then, us included. deposits are public on mempool.space.</p>
     <h3>SEE ALSO</h3><p><a href="#halving">halving(2)</a>, <a href="#proof">proof(3)</a>, <a href="https://bitcoin.org/bitcoin.pdf" target="_blank" rel="noopener">bitcoin.pdf</a></p>
   </div></div></div>
 </main>

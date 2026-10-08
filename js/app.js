@@ -42,7 +42,7 @@ function chainBar() {
   $('#cDrip').textContent = fmt(DRIP * eraFactor(t.height));
   $('#sTip').innerHTML = `tip <b>#${fmt(t.height)}</b>`;
   const r = release(t.height);
-  $('#kLeft').textContent = fmt(r.left); $('#kLeftSub').textContent = `#${fmt(RELEASE_HEIGHT)} · ${r.years.toFixed(3)} yrs`;
+  $('#kLeft').textContent = fmt(r.left); $('#vaultLeft').textContent = `${fmt(r.left)} blocks to go`; $('#kLeftSub').textContent = `#${fmt(RELEASE_HEIGHT)} · ${r.years.toFixed(3)} yrs`;
   $('#kEra').innerHTML = `${era(t.height)}<small>· ${fmt(DRIP * eraFactor(t.height))} uBTC</small>`; $('#kEraSub').textContent = `halves at #${fmt(nextHalving(t.height))}`;
   $('#vRel').textContent = `opens ${r.eta.toLocaleString('en-US', { month: 'short' }).toLowerCase()} ${r.eta.getFullYear()} · block #${fmt(RELEASE_HEIGHT)}`;
 }
@@ -99,7 +99,7 @@ function agents() {
       const a = h.you ? (wallet.current && wallet.current.address) : h.wallet; const w = fw(a);
       const mined = h.you ? (a ? vault.of(a).total : 0) : (h.mined || 0);
       const link = a ? `<a href="https://mempool.space/address/${a}" target="_blank" rel="noopener">${a}</a>` : '—';
-      return `<div class="ag ${h.you ? 'you' : ''}"><span class="who">${h.you ? 'YOU' : h.label}<i>${h.you ? (rig.running ? 'rig on' : 'idle') : rate(h.stat && h.stat.rate)}</i></span><span class="addr">${link}</span><span class="num">${w ? w.first_funded.slice(11, 16) + ' UTC' : '—'}</span><span class="num">${a && bal[a] != null ? btc(bal[a]) : w ? btc(w.balance_btc) : '—'}</span><span class="num mined">${ubtc(mined)}</span><span class="num">${h.shares || 0}</span><span class="h">${h.lastShare && h.lastShare.hash ? hz(h.lastShare.hash, 24) : '—'}</span><span class="addrline">${a || ''}</span></div>`;
+      return `<div class="ag ${h.you ? 'you' : ''}"><span class="who">${h.you ? 'YOU' : h.label}<i>${h.you ? (rig.running ? 'rig on' : 'idle') : rate(h.stat && h.stat.rate)}</i></span><span class="addr">${link}</span><span class="num">${w ? `<a class="tx" href="https://mempool.space/tx/${w.first_txid}" target="_blank" rel="noopener" title="first funding transaction">${w.first_funded.slice(11, 16)} UTC ↗</a>` : '—'}</span><span class="num">${a && bal[a] != null ? btc(bal[a]) : w ? btc(w.balance_btc) : '—'}</span><span class="num mined">${ubtc(mined)}</span><span class="num">${h.shares || 0}</span><span class="h">${h.lastShare && h.lastShare.hash ? hz(h.lastShare.hash, 24) : '—'}</span><span class="addrline">${a || ''}</span></div>`;
     }).join('');
   const miners = hs.filter(h => !h.you); const sum = miners.reduce((s, h) => s + ((h.stat && h.stat.rate) || 0), 0);
   $('#kRate').textContent = rate(sum); $('#agMeta').textContent = fresh ? `${fresh.wallets.length} wallets · ${btc(fresh.wallets.reduce((s, w) => s + (bal[w.address] != null ? bal[w.address] : w.balance_btc), 0))} BTC held` : '—';

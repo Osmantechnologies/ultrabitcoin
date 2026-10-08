@@ -269,3 +269,18 @@ body.cx-open{overflow:hidden}
 .cxm__out{color:var(--joint)!important}
 .fx-connect{width:100%;margin-top:10px}
 @media (max-width:1440px){body:has(.chip--launch.is-on) .top__right .chip--hide{display:none}}
+
+/* goal + creator fees */
+.dash--goal{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+@media (max-width:900px){.dash--goal{grid-template-columns:minmax(0,1fr)}}
+.goal p{color:var(--ink-2);max-width:62ch;margin-bottom:10px}
+.goal p b{color:var(--ink)}
+.goal__big{font:800 clamp(20px,2vw,26px)/1.15 var(--display)!important;color:var(--ink)!important;letter-spacing:-.02em;max-width:24ch!important}
+.goal__script{background:var(--bar);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;margin:4px 0 12px;font-size:12px;color:var(--ink)}
+.goal__script .c{color:var(--ink-3)}.goal__script .k{color:var(--leg);font-weight:700}.goal__script .s{color:var(--violet)}
+.goal__dl{padding:0!important;grid-template-columns:9ch minmax(0,1fr)!important}
+.goal__dl dt{color:var(--ink-3)}.goal__dl dd{color:var(--ink);white-space:normal}
+.ag .tx{color:var(--ink);text-decoration:none}.ag .tx:hover{color:var(--leg)}
+.ag{grid-template-columns:minmax(0,1fr) minmax(0,2.1fr) 12ch 10ch 9ch 7ch minmax(0,1.6fr)}
+@media (max-width:1100px){.ag{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) 12ch 9ch 8ch}}
+@media (max-width:640px){.ag{grid-template-columns:minmax(0,1fr) 10ch 8ch}}
