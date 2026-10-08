@@ -4,3 +4,4 @@ qa/*.jpg
 .DS_Store
 .gstack/
 art-src/*-hd.glb
+deploy/
