@@ -184,7 +184,7 @@ function buildFront() {
   place('tools', 0.7, 'w', BENCH.x + 0.1, BENCH.z - 0.5, 0.6, 0.98);
   for (const [dx, dz, dy, r] of [[0, 0, 0, 0.1], [1.0, 0.1, 0, -0.2], [0.5, -0.9, 0, 0.4], [0.1, 0.05, 0.92, 0.5], [0.95, 0, 0.92, 0], [0.5, -0.85, 0.92, -0.3], [0.5, -0.4, 1.84, 0.2]]) place('crate', 0.95, 'w', CRATES.x + dx - 0.5, CRATES.z + dz, r, dy);
   // the build bay: a floor plate where hauled crates become a new tower, level by level
-  flat(RACK.d + 0.6, RACK.w + 0.6, BAY.x, BAY.z, new THREE.MeshBasicMaterial({ color: 0x1a1408 }), 0.006);
+  flat(RACK.d + 0.6, RACK.w + 0.6, BAY.x, BAY.z, new THREE.MeshBasicMaterial({ color: 0xf6dccd }), 0.006);
   for (const [w, d, x, z] of [[RACK.d + 0.6, 0.05, 0, -(RACK.w + 0.6) / 2], [RACK.d + 0.6, 0.05, 0, (RACK.w + 0.6) / 2], [0.05, RACK.w + 0.6, -(RACK.d + 0.6) / 2, 0], [0.05, RACK.w + 0.6, (RACK.d + 0.6) / 2, 0]]) flat(w, d, BAY.x + x, BAY.z + z, safety, 0.008);
 }
 function bayAdd() {

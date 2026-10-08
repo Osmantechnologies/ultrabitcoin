@@ -1,7 +1,7 @@
 # First post — Ultrabitcoin (2026-10-08)
 Numbers checked 2026-10-08. Bitcoin tip #970,508. Wallets picked 15:34 UTC from mempool.space (`data/fresh-wallets.json`):
 first transaction confirmed under 24 h earlier, ≥ 0.02 BTC received, still holding.
-Attach in order: qa/post-1-hero.png → qa/post-2-hall.png → qa/post-3-wallets.png → qa/post-4-source.png
+Attach in order: qa/post-1-top.png → qa/post-2-hall.png → qa/post-3-wallets.png → qa/post-4-source.png
 Long version needs X Premium (over 280 characters).
 
 ## Long version
