@@ -4,6 +4,8 @@ first transaction confirmed under 24 h before the pick. The four below are the l
 Tx c63abc… pays 1.0 BTC to bc1qsvg7… (block 970,436); tx 1c607c… pays 0.28592368 BTC to bc1qys7t… (block 970,404).
 Attach in order: qa/post-1-top.png → qa/post-2-hall.png → qa/post-3-wallets.png → qa/post-4-source.png
 Long version needs X Premium (over 280 characters).
+Creator fees (owner's choice, 2026-10-09): BTC into a CLTV-timelocked vault (`<16738498> OP_CHECKLOCKTIMEVERIFY OP_DROP <pubkey> OP_CHECKSIG`, P2WSH).
+The vault address is NOT built yet: it needs the owner's public key. Build + verify it before the coin launches, then add the address to the site.
 
 ## Long version
 
@@ -25,6 +27,10 @@ mempool.space/tx/c63abcdba3b4405a0a42ad22cb0aa363f2f41f48c8d9a8a357acb4538e4f6c6
 mempool.space/tx/1c607cf1899285f26cb50296b5cafcd45907a18c31bdb670dab80b6239c7aa45
 
 Connect a Bitcoin wallet and your browser mines beside them. Bitcoin, but ultra.
+
+**Our goal.** A Bitcoin faucet that keeps a 300-year promise in the open. uBTC drips today, every vault opens at block 16,738,498, and real bitcoin waits for the same block.
+
+**Creator fees.** Every creator fee buys BTC and goes into one vault address locked by Bitcoin's own timelock until block 16,738,498. No key can move it before then, ours included. Every deposit is public on mempool.space, and the vault opens the same day the uBTC vaults do.
 
 ## Short version (≤280, one post)
 
