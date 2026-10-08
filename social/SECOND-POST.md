@@ -4,7 +4,7 @@ network 989 EH/s (3-day). Expected hashes per real block = difficulty × 2^32 = 
 ≈ 1.2 × 10^11 years. Share target ≈ 20 bits (retargets per device), reward 10 uBTC per 2^20 hashes (era 4).
 Lock: BIP65 CLTV; nLockTime values < 500,000,000 are block heights; 16,738,498 = 970,498 + 300 × 52,560.
 The vault address is not built yet (needs the owner's public key) — the post describes the lock, it does not claim BTC is in it.
-Attach in order: qa/post2-1-top.png → qa/post2-2-machine.png → qa/post2-3-zerobits.png → qa/post2-4-lock.png
+Attach in order: qa/post2-web-hall.png → qa/post2-web-lock.png (live-site screenshots; close-ups qa/post2-1..4 as extras)
 Long version needs X Premium.
 
 ## Long version
