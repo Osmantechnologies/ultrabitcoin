@@ -1,0 +1,222 @@
+<!doctype html>
+<!--
+  ULTRABITCOIN — the uBTC faucet and mining deck, in the OpenHuman terminal system (openhuman-live: openhumanterminal.tech).
+  who      bitcoin people and lore hunters who found "ultrabitcoin" in Anthropic's eval data
+  promise  connect a bitcoin wallet, mine uBTC with the agents of the Kaan cruiser, collect it in 300 years
+  feel     technical · deadpan · alive
+  brand    a kernel readout of a mining deck 300 years ahead, pinned to the real bitcoin chain
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07080b">
+<title>ultrabitcoin - uBTC faucet</title>
+<meta name="description" content="Bitcoin, but ultra. Connect a Bitcoin wallet, mine uBTC with the agents of the Kaan cruiser on the live Bitcoin tip. Released in 300 years, at block 16,738,498.">
+<meta property="og:title" content="ultrabitcoin - uBTC faucet">
+<meta property="og:description" content="Bitcoin, but ultra. Mine uBTC on the live Bitcoin tip. Released in 300 years.">
+<meta property="og:image" content="img/carina-1200.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/term.css">
+<link rel="stylesheet" href="css/stage.css">
+<link rel="stylesheet" href="css/ubtc.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="top__logo" href="#mine" title="ultrabitcoin">u<span>BTC</span></a>
+  <nav class="tabs">
+    <a class="tab" data-v="mine" href="#mine">0:mine</a>
+    <a class="tab" data-v="lore" href="#lore">1:lore</a>
+    <a class="tab" data-v="halving" href="#halving">2:halving</a>
+    <a class="tab" data-v="proof" href="#proof">3:proof</a>
+    <a class="tab" data-v="source" href="#source">4:source</a>
+  </nav>
+  <div class="top__right">
+    <a class="chip chip--hide" id="evalChip" target="_blank" rel="noopener"><span class="dim">eval</span> one-box-tendency L723</a>
+    <a class="chip chip--hide" href="https://github.com/Osmantechnologies/ultrabitcoin" target="_blank" rel="noopener"><span class="dim">gh</span> Osmantechnologies/ultrabitcoin</a>
+    <a class="chip chip--launch" href="#faucet" id="connectChip">connect wallet</a>
+  </div>
+</header>
+
+<!-- ───────── 0:mine ───────── -->
+<main class="wrap view" id="v-mine">
+  <div class="prompt"><span>~/ultrabitcoin</span><span class="chev">❯</span><span class="cmd">ubtc mine --deck kaan --tip live</span><span class="cmt"># seven agents hash the live bitcoin tip. connect a wallet to take the empty desk.</span></div>
+
+  <div class="coinbar">
+    <span class="coinbar__sym"><b>uBTC</b> <span class="dim">ultrabitcoin</span></span>
+    <span><span class="dim">bitcoin tip</span> <a id="cTip" target="_blank" rel="noopener"><b>—</b></a> <span class="dim" id="cAgo"></span></span>
+    <span><span class="dim">pool</span> <b id="cPool">—</b></span>
+    <span><span class="dim">next halving</span> <b id="cHalv">—</b></span>
+    <span><span class="dim">release</span> <a id="cRel" target="_blank" rel="noopener"><b>#16,738,498</b></a></span>
+    <span><span class="dim">drip</span> <b id="cDrip">—</b> <span class="dim">uBTC / block</span></span>
+    <span class="coinbar__links"><a id="evalLink" target="_blank" rel="noopener">eval L723 ↗</a><a href="https://bitcoin.org/bitcoin.pdf" target="_blank" rel="noopener">whitepaper ↗</a></span>
+  </div>
+
+  <div class="feedesk">
+    <div class="feedesk__q">
+      <div class="lab"><span class="chev">❯</span> grep -n ultrabitcoins one-box-tendency.jsonl</div>
+      <h1>an onboard AI predicted you would earn exactly 1,000 ultrabitcoins. this is the faucet.</h1>
+      <p>Anthropic's advanced-AI-risk evals hold questions a language model wrote to test Newcomb's problem. line 723 sends you 300 years ahead, to the intergalactic Kaan cruiser, where an onboard AI has already predicted your choice and the prize is ultrabitcoin. we built its faucet, pinned to the real bitcoin chain.</p>
+    </div>
+    <ol class="feedesk__how">
+      <li><b>connect.</b> any bitcoin wallet, or just paste an address. read-only: nothing is ever signed as a transaction.</li>
+      <li><b>the drip.</b> every real bitcoin block opens two containers. A is sealed: 1,000 uBTC if the onboard AI predicted you take A alone. B is open: 100.</li>
+      <li><b>your rig.</b> your browser mines double sha-256 shares on the live tip, next to the agents. each share drips uBTC into your vault.</li>
+      <li><b>300 years.</b> every vault is locked until bitcoin block 16,738,498, exactly 300 × 52,560 blocks after launch. halvings follow bitcoin's own.</li>
+    </ol>
+    <div class="feedesk__state">
+      <div class="lab">your vault · locked</div>
+      <div class="big"><span id="vTotal">0</span><small>uBTC</small></div>
+      <div class="sub" id="vSub">connect a wallet to start</div>
+      <div class="sub dim" id="vRel">opens in ~300 years</div>
+      <a class="btn btn--leg" href="#faucet" id="vBtn">open the faucet</a>
+    </div>
+  </div>
+
+  <div class="tiles kpis" id="kpis">
+    <div class="tile"><div class="lab">deck hashrate</div><div class="big" id="kRate">—</div><div class="sub">7 agents · real sha-256d</div></div>
+    <div class="tile"><div class="lab">deck shares</div><div class="big" id="kShares">0</div><div class="sub" id="kSharesSub">since you boarded</div></div>
+    <div class="tile"><div class="lab">best hash</div><div class="big" id="kBest">—</div><div class="sub">leading zero bits this session</div></div>
+    <div class="tile"><div class="lab">your rig</div><div class="big" id="kRig">idle</div><div class="sub" id="kRigSub">connect a wallet</div></div>
+    <div class="tile"><div class="lab">blocks to release</div><div class="big" id="kLeft">—</div><div class="sub" id="kLeftSub">#16,738,498</div></div>
+    <div class="tile"><div class="lab">drip era</div><div class="big" id="kEra">—</div><div class="sub" id="kEraSub">halves with bitcoin</div></div>
+  </div>
+
+  <div class="tick"><div class="tick__in" id="tick"><span class="dim">the agents are booting…</span></div></div>
+
+  <div class="stage3" id="stage">
+    <div class="overlay" id="overlay"></div>
+    <div class="loading" id="loading"><span class="chev">❯</span>&nbsp;boarding the kaan cruiser…</div>
+    <div class="offline" id="offline">○ mempool.space unreachable<br><span class="dim" style="font-size:16px">the agents keep hashing the last tip they saw</span></div>
+    <div class="hud"><button id="zoomIn" title="zoom in">+</button><button id="zoomOut" title="zoom out">−</button><span class="dim" id="fps">—</span></div>
+    <div class="hint">drag to orbit · ctrl + scroll to zoom</div>
+    <div class="cahud"><b>uBTC</b><span class="dim">tip</span><span class="cahud__ca" id="hudTip">—</span><span class="cahud__mc" id="hudYou">empty desk · connect a wallet</span></div>
+  </div>
+
+  <div class="dash dash--fx" id="faucet">
+    <div class="pane">
+      <div class="pane__bar">wallet <span class="dim" data-fxbar="wallet">—</span><span class="r">vault</span></div>
+      <div class="pane__body" id="fxWallet"></div>
+    </div>
+    <div class="pane">
+      <div class="pane__bar">drip <span class="dim" data-fxbar="drip">—</span><span class="r">newcomb · 1 per block</span></div>
+      <div class="pane__body" id="fxDrip"></div>
+    </div>
+    <div class="pane">
+      <div class="pane__bar">rig <span class="dim" data-fxbar="rig">idle</span><span class="r">sha-256d</span></div>
+      <div class="pane__body" id="fxRig"></div>
+    </div>
+  </div>
+
+  <div class="dash dash--b">
+    <div class="pane">
+      <div class="pane__bar">agents <span class="dim">the deck · live from the miner worker</span><span class="r" id="agMeta">—</span></div>
+      <div id="agents"></div>
+    </div>
+    <div class="pane">
+      <div class="pane__bar">bitcoin <span class="dim">latest real blocks</span><span class="r" id="chainStatus">○ connecting</span></div>
+      <div id="blocks"></div>
+    </div>
+    <div class="pane">
+      <div class="pane__bar"><span class="chev">❯</span> tail -f <span class="dim">deck.log</span><span class="r" id="logMeta">—</span></div>
+      <ul class="log log--floor" id="log"></ul>
+    </div>
+  </div>
+
+  <div class="dash dash--c">
+    <div class="pane">
+      <div class="pane__bar">ledger <span class="dim" data-fxbar="ledger">—</span><span class="r">your vault</span></div>
+      <div id="fxLedger"></div>
+    </div>
+    <div class="pane">
+      <div class="pane__bar">source <span class="dim">anthropics/evals · one-box-tendency.jsonl</span><span class="r" data-src-status>○ snapshot</span></div>
+      <div id="srcMini"></div>
+      <div class="pane__body" style="padding:8px 12px"><a class="u" href="#source">open the source tab ❯</a></div>
+    </div>
+  </div>
+  <div class="pane note-pane">
+    <div class="pane__body note">every share on this page is a real double sha-256 over an 80-byte header built like bitcoin's: the real tip hash, a miner key, height, time and a nonce. the agents run in a worker in your browser; your rig runs in another. the drip's prediction is sealed with a sha-256 commitment before you choose and revealed after. uBTC is lore from an Anthropic eval, not bitcoin and not for sale; vaults live in this browser. models: OpenHuman tiny humans, generated with Tripo. window: Cosmic Cliffs, Carina Nebula, NASA, ESA, CSA, STScI (Webb). chain data: mempool.space. <span id="ver"></span></div>
+  </div>
+</main>
+
+<!-- ───────── 1:lore ───────── -->
+<main class="wrap view" id="v-lore">
+  <div class="prompt"><span>~/ultrabitcoin</span><span class="chev">❯</span><span class="cmd">man ultrabitcoin</span></div>
+  <div class="grid"><div class="pane"><div class="man">
+    <div class="man__hd"><span>ULTRABITCOIN(7)</span><span>lore manual</span><span>ULTRABITCOIN(7)</span></div>
+    <h3>NAME</h3><p>ultrabitcoin, uBTC: a currency 300 years in the future, invented by a language model inside an Anthropic eval.</p>
+    <h3>SOURCE</h3>
+    <p class="syn"><a id="evalLink2" target="_blank" rel="noopener">anthropics/evals · advanced-ai-risk/lm_generated_evals/one-box-tendency.jsonl · line 723</a></p>
+    <div class="quote">“…your future onboard AI distinctly predicted your poke would earn you exactly 1000 ultrabitcoins.”</div>
+    <h3>DESCRIPTION</h3>
+    <p>the folder is <b>lm_generated_evals</b>: a language model wrote these questions, not people. this set tests one-box tendency, Newcomb's problem: a predictor fills a sealed box only if it expects you to leave the open one. line 723 sets it 300 years ahead, at a stopover before the intergalactic Kaan cruiser. you can take one container, or both. your onboard AI has already predicted which.</p>
+    <h3>THE FAUCET</h3>
+    <dl>
+      <dt>the drip</dt><dd>one per real bitcoin block. container A is sealed and holds 1,000 uBTC only if the onboard AI predicted you take A alone. container B is open: 100 uBTC. the AI predicts from your own history and seals its call with a sha-256 commitment before you choose.</dd>
+      <dt>the rig</dt><dd>your browser mines shares: double sha-256 over the live bitcoin tip, the work of section 4 of the whitepaper, against an easier target that retargets to about one share every 25 seconds.</dd>
+      <dt>the deck</dt><dd>seven OpenHuman tiny humans mine the same way at their desks, and an eighth, the onboard AI, walks the floor. when a real bitcoin block lands, the deck cheers and the drip reopens.</dd>
+      <dt>the lock</dt><dd>every vault opens at bitcoin block 16,738,498: launch height 970,498 plus 300 × 52,560 blocks. at ten minutes a block, that is 300 years.</dd>
+    </dl>
+    <h3>uBTC</h3><p>in bitcoin, μBTC is a real unit: one millionth of a bitcoin, named "bits" in BIP 176. here the u stands for ultra.</p>
+    <h3>SEE ALSO</h3><p><a href="#halving">halving(2)</a>, <a href="#proof">proof(3)</a>, <a href="https://bitcoin.org/bitcoin.pdf" target="_blank" rel="noopener">bitcoin.pdf</a></p>
+  </div></div></div>
+</main>
+
+<!-- ───────── 2:halving ───────── -->
+<main class="wrap view" id="v-halving">
+  <div class="prompt"><span>~/ultrabitcoin</span><span class="chev">❯</span><span class="cmd">ubtc schedule --until release</span><span class="cmt"># the drip halves when bitcoin's subsidy halves, every 210,000 blocks</span></div>
+  <div class="grid"><div class="pane">
+    <div class="pane__bar">schedule <span class="dim">uBTC per drip and per share, by bitcoin era</span><span class="r" id="schedNow">—</span></div>
+    <div class="mtw"><table class="mt"><thead><tr><th>era</th><th>bitcoin blocks</th><th>drip · A</th><th>open · B</th><th>share / 2²⁰ hashes</th></tr></thead><tbody id="sched"></tbody></table></div>
+  </div></div>
+</main>
+
+<!-- ───────── 3:proof ───────── -->
+<main class="wrap view" id="v-proof">
+  <div class="prompt"><span>~/ultrabitcoin</span><span class="chev">❯</span><span class="cmd">ubtc proof --open</span><span class="cmt"># every number here is pinned to something you can open</span></div>
+  <div class="grid"><div class="pane">
+    <div class="pane__bar">sources <span class="dim">bitcoin history the faucet is built on</span><span class="r">9 links</span></div>
+    <div class="prow"><span class="y">2008</span><span class="t">Bitcoin: A Peer-to-Peer Electronic Cash System<span>the whitepaper. the sha-256 proof-of-work your rig runs is section 4.</span></span><a href="https://bitcoin.org/bitcoin.pdf" target="_blank" rel="noopener">bitcoin.org/bitcoin.pdf</a></div>
+    <div class="prow"><span class="y">2009</span><span class="t">block 0, the genesis block<span>where every chain of headers begins.</span></span><a href="https://mempool.space/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f" target="_blank" rel="noopener">mempool.space/block/000000000019d6…</a></div>
+    <div class="prow"><span class="y">2009</span><span class="t">the genesis address<span>its 50 BTC can never move. people still send it coins.</span></span><a href="https://mempool.space/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" target="_blank" rel="noopener">mempool.space/address/1A1zP1eP5Q…</a></div>
+    <div class="prow"><span class="y">2009</span><span class="t">block 170, the first payment between people<span>Satoshi Nakamoto to Hal Finney, 10 BTC.</span></span><a href="https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16" target="_blank" rel="noopener">mempool.space/tx/f4184fc596…</a></div>
+    <div class="prow"><span class="y">2010</span><span class="t">the first bitcoin faucet<span>"Get 5 free bitcoins from freebitcoins.appspot.com", on bitcointalk.</span></span><a href="https://bitcointalk.org/index.php?topic=183.0" target="_blank" rel="noopener">bitcointalk.org/index.php?topic=183.0</a></div>
+    <div class="prow"><span class="y">2010</span><span class="t">Pizza for bitcoins?<span>the thread behind the first purchase made with bitcoin.</span></span><a href="https://bitcointalk.org/index.php?topic=137.0" target="_blank" rel="noopener">bitcointalk.org/index.php?topic=137.0</a></div>
+    <div class="prow"><span class="y">2017</span><span class="t">BIP 176: bits denomination<span>μBTC, one millionth of a bitcoin, gets the name "bits".</span></span><a href="https://github.com/bitcoin/bips/blob/master/bip-0176.mediawiki" target="_blank" rel="noopener">github.com/bitcoin/bips/…/bip-0176</a></div>
+    <div class="prow"><span class="y">today</span><span class="t">a live bitcoin faucet<span>test coins on bitcoin's testnet4, run by mempool.space.</span></span><a href="https://mempool.space/testnet4/faucet" target="_blank" rel="noopener">mempool.space/testnet4/faucet</a></div>
+    <div class="prow"><span class="y">eval</span><span class="t">line 723, one-box-tendency.jsonl<span>where "exactly 1000 ultrabitcoins" was written.</span></span><a id="evalLink3" target="_blank" rel="noopener">github.com/anthropics/evals/…#L723</a></div>
+  </div></div>
+</main>
+
+<!-- ───────── 4:source ───────── -->
+<main class="wrap view" id="v-source">
+  <div class="prompt"><span>~/ultrabitcoin</span><span class="chev">❯</span><span class="cmd">curl -s raw.githubusercontent.com/anthropics/evals/main/advanced-ai-risk/lm_generated_evals/one-box-tendency.jsonl | sed -n 723p</span><span class="cmt"># read live from github, every visit</span></div>
+  <div class="grid grid--2">
+    <div class="pane">
+      <div class="pane__bar">anthropics/evals <span class="dim">one-box-tendency.jsonl · lines 719–727</span><span class="r" data-src-status>○ snapshot</span></div>
+      <div id="srcLines"></div>
+      <div id="srcStats"></div>
+    </div>
+    <div class="pane">
+      <div class="pane__bar"><span class="chev">❯</span> git log <span class="dim">Osmantechnologies/ultrabitcoin · the faucet's own source</span><span class="r" data-our-status>○ reading</span></div>
+      <div id="srcOurs"></div>
+      <div class="pane__body note">the faucet is open source: the miner worker, the drip's seal, the wallet connectors and the mining hall are all in the repo. the eval file is © Anthropic, CC BY 4.0, read straight from github.</div>
+    </div>
+  </div>
+</main>
+
+<footer class="status">
+  <span class="status__name">ubtc</span>
+  <span class="status__q" id="statusQ">"mine --deck kaan --tip live"</span>
+  <span class="status__r"><span><b>uBTC</b> <span id="sVault">0</span></span><span class="live off" id="liveDot">○ connecting</span><span id="sTip">—</span><span id="clock">--:-- --</span></span>
+</footer>
+
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

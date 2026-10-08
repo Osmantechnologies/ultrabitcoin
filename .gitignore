@@ -1,0 +1,4 @@
+qa/*.png
+qa/*.jpg
+*.log
+.DS_Store
