@@ -51,7 +51,6 @@
 
   <div class="cabar">
     <span class="cabar__sym"><b>$uBTC</b> <span class="dim">Ultra Bitcoin</span></span>
-    <span class="cabar__ca"><span class="dim">CA</span> <span class="ca-full" data-ca>3ibpM2bK8xMvAY2vYpQV6W3xWuxiPUoqPPJt4ieopump</span><button data-copy-ca>copy</button></span>
     <span><span class="dim">mcap</span> <b data-coin="mcap">—</b></span>
     <span data-coin="chg">—</span>
     <span class="cabar__fees">fees go into locking BTC for 300 years</span>
@@ -106,7 +105,7 @@
     <div class="offline" id="offline">○ mempool.space unreachable<br><span class="dim" style="font-size:16px">the agents keep hashing the last tip they saw</span></div>
     <div class="hud"><button id="zoomIn" title="zoom in">+</button><button id="zoomOut" title="zoom out">−</button><span class="dim" id="fps">—</span></div>
     <div class="hint">drag to orbit · tap the wall to read it</div>
-    <div class="cahud"><b>$uBTC</b><span class="dim">CA</span><span class="cahud__ca">3ibpM2bK8xMvAY2vYpQV6W3xWuxiPUoqPPJt4ieopump</span><button data-copy-ca>copy</button><span class="dim">tip</span><span id="hudTip">—</span><span class="cahud__mc" id="hudYou">free tower · connect a wallet</span></div>
+    <div class="cahud"><b>$uBTC</b><span class="dim">tip</span><span id="hudTip">—</span><span class="cahud__mc" id="hudYou">free tower · connect a wallet</span></div>
   </div>
 
   <div class="dash dash--fx" id="faucet">
@@ -139,7 +138,7 @@
         <pre class="goal__script"><span class="c"># the vault's spending script</span>
 <span class="k">16738498</span> OP_CHECKLOCKTIMEVERIFY OP_DROP
 <span class="s">&lt;key&gt;</span> OP_CHECKSIG</pre>
-        <dl class="rules goal__dl"><dt>opens at</dt><dd>block #16,738,498 · the same block as every uBTC vault</dd><dt>deposits</dt><dd>public on mempool.space</dd><dt>coin</dt><dd>$uBTC · <span class="ca-inline">3ibpM2bK8xMvAY2vYpQV6W3xWuxiPUoqPPJt4ieopump</span></dd><dt>vault</dt><dd>address posted with the first lock</dd></dl>
+        <dl class="rules goal__dl"><dt>opens at</dt><dd>block #16,738,498 · the same block as every uBTC vault</dd><dt>deposits</dt><dd>public on mempool.space</dd><dt>coin</dt><dd>$uBTC</dd><dt>vault</dt><dd>address posted with the first lock</dd></dl>
       </div>
     </div>
   </div>
@@ -199,7 +198,7 @@
     </dl>
     <h3>uBTC</h3><p>in bitcoin, μBTC is a real unit: one millionth of a bitcoin, named "bits" in BIP 176. here the u stands for ultra.</p>
     <h3>GOAL</h3><p>a bitcoin faucet that keeps a 300-year promise in the open. uBTC drips today, every vault opens at block 16,738,498, and real bitcoin waits for the same block.</p>
-    <h3>CREATOR FEES</h3><p>the coin is $uBTC (CA <code>3ibpM2bK8xMvAY2vYpQV6W3xWuxiPUoqPPJt4ieopump</code>). its fees go into locking BTC for 300 years, with Bitcoin's own timelock until block 16,738,498: <code>16738498 OP_CHECKLOCKTIMEVERIFY OP_DROP &lt;key&gt; OP_CHECKSIG</code>. no one can move it before then, us included. deposits are public on mempool.space.</p>
+    <h3>CREATOR FEES</h3><p>the coin is $uBTC. its fees go into locking BTC for 300 years, with Bitcoin's own timelock until block 16,738,498: <code>16738498 OP_CHECKLOCKTIMEVERIFY OP_DROP &lt;key&gt; OP_CHECKSIG</code>. no one can move it before then, us included. deposits are public on mempool.space.</p>
     <h3>SEE ALSO</h3><p><a href="#halving">halving(2)</a>, <a href="#proof">proof(3)</a>, <a href="https://bitcoin.org/bitcoin.pdf" target="_blank" rel="noopener">bitcoin.pdf</a></p>
   </div></div></div>
 </main>
